@@ -207,6 +207,8 @@ class Providers:
                     headers={"User-Agent": "CareerPilot/0.3"},
                 ) as client:
                     body = json.loads(await read(client, url, params))
+                if provider != "lever" and not isinstance(body, dict):
+                    raise ValueError("Unsupported feed schema")
                 rows = (
                     body
                     if provider == "lever"
@@ -278,7 +280,7 @@ class Providers:
                             "employer": employer,
                             "url": url,
                             "location": plain(location)[:240],
-                            "country": "",
+                            "country": name if provider == "smartrecruiters" else "",
                             "description": plain(description),
                             "salary": "Not supplied in listing fields",
                             "source": provider + " public feed: " + employer,
@@ -315,7 +317,11 @@ class Providers:
                     )
                     aliases = [
                         body.country.lower(),
-                        CODES.get(body.country, ""),
+                        *(
+                            [CODES.get(body.country, "")]
+                            if feed.provider == "smartrecruiters"
+                            else []
+                        ),
                         *(
                             {
                                 "UAE": ["united arab emirates"],
@@ -330,6 +336,8 @@ class Providers:
                         if t not in {"junior", "graduate", "engineer"}
                     ]
                     for j in rows:
+                        if j.get("country") and j["country"] != body.country:
+                            continue
                         if not any(
                             re.search(r"\b" + re.escape(a) + r"\b", j["location"], re.I)
                             for a in aliases
@@ -365,7 +373,11 @@ class Providers:
                             loc = str(r.get("candidate_required_location", ""))
                             aliases = [
                                 body.country,
-                                CODES.get(body.country, ""),
+                                *(
+                                    [CODES.get(body.country, "")]
+                                    if feed.provider == "smartrecruiters"
+                                    else []
+                                ),
                                 {"UAE": "United Arab Emirates", "USA": "United States"}.get(
                                     body.country, ""
                                 ),
@@ -532,7 +544,7 @@ class Providers:
             assessment = fit(db, job)
             if assessment["salary_comparison"]["minimum_status"] == "Below country minimum.":
                 continue
-            output.append({**job, **assessment})
+            output.append({**job, **assessment, "fit": assessment})
         return {
             "jobs": sorted(output, key=lambda x: -x["score"])[:100],
             "errors": errors,
@@ -568,9 +580,14 @@ async def capture(url, permitted, transport=None):
                     limit=1500000,
                 )
             )
+            if not isinstance(body, dict):
+                raise ValueError("Unsupported posting schema; paste the text.")
             if body.get("active") is False:
                 raise ValueError("The posting is marked inactive. Check the original.")
-            sections = body.get("jobAd", {}).get("sections", {})
+            advertisement = body.get("jobAd")
+            sections = advertisement.get("sections") if isinstance(advertisement, dict) else None
+            if not isinstance(sections, dict):
+                raise ValueError("Published sections are missing; paste the text.")
             description = "\n\n".join(
                 str(v.get("title") or k) + "\n" + plain(v.get("text", ""))
                 for k, v in sections.items()
@@ -578,8 +595,8 @@ async def capture(url, permitted, transport=None):
             )
             if not body.get("name") or not description:
                 raise ValueError("Published fields incomplete; paste the original text.")
-            loc = body.get("location", {})
-            code = loc.get("country", "")
+            loc = body.get("location") if isinstance(body.get("location"), dict) else {}
+            code = str(loc.get("country", ""))
             country = next((n for n, c in CODES.items() if c == code.lower()), code)
             result = {
                 "title": str(body["name"])[:240],
@@ -594,7 +611,7 @@ async def capture(url, permitted, transport=None):
                 "salary": "Structured salary not supplied; review original",
                 "closing_date": "",
             }
-            pay = body.get("compensation") or {}
+            pay = body.get("compensation") if isinstance(body.get("compensation"), dict) else {}
             lo, hi = number(pay.get("min")), number(pay.get("max"))
             cur = str(pay.get("currency", ""))
             period = {"year": "year", "annual": "year", "month": "month", "hour": "hour"}.get(
@@ -644,9 +661,14 @@ async def capture(url, permitted, transport=None):
         endpoint, headers, ext = pin("https://" + parsed.netloc + "/robots.txt")
         async with client.stream("GET", endpoint, headers=headers, extensions=ext) as robots:
             if robots.status_code == 200:
-                raw = await robots.aread()
-                if len(raw) > 200000:
-                    raise ValueError("Robots policy too large; paste the text.")
+                chunks = []
+                total = 0
+                async for chunk in robots.aiter_bytes():
+                    total += len(chunk)
+                    if total > 200000:
+                        raise ValueError("Robots policy too large; paste the text.")
+                    chunks.append(chunk)
+                raw = b"".join(chunks)
                 policy = RobotFileParser()
                 policy.parse(raw.decode(errors="replace").splitlines())
                 if not policy.can_fetch("CareerPilot", url):

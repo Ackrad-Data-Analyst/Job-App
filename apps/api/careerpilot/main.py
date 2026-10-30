@@ -10,6 +10,7 @@ import uuid
 from datetime import timedelta
 from itertools import product
 
+import httpx
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
@@ -775,7 +776,7 @@ class CaptureInput(Input):
 async def capture_job(body: CaptureInput):
     try:
         return await asyncio.wait_for(capture(body.url, body.permitted), 40)
-    except (ValueError, OSError) as e:
+    except (ValueError, OSError, httpx.HTTPError) as e:
         raise HTTPException(
             422, str(e) if isinstance(e, ValueError) else "Read failed. Paste the text instead."
         ) from None

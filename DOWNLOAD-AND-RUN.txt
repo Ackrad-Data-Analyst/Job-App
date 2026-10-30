@@ -1,0 +1,24 @@
+CAREERPILOT - RUN ON YOUR OWN COMPUTER
+
+1. Extract the whole ZIP into a folder you control.
+2. Install Python 3.12+ and Node.js 24 LTS if needed:
+   https://www.python.org/downloads/ (Windows: select Add Python to PATH)
+   https://nodejs.org/
+3. Windows: double-click start.bat.
+   macOS: open start.command, or run bash start.sh in Terminal.
+   Linux: run bash start.sh.
+4. Keep the Start window open. Your browser opens automatically.
+   First start needs internet and takes a few minutes.
+5. Use the matching Stop file or Ctrl+C when finished.
+
+No deployment, Docker or paid API key is needed.
+Your records remain in data/. Stop before making a private backup.
+If this package contains data/private/profile.seed.json, keep the ZIP private.
+Review imported facts in Career profile before using drafts.
+Search results are source-limited. Check each original employer posting.
+CareerPilot never applies or sends messages automatically.
+
+If a temporary chat download fails, the source remains available at:
+https://github.com/Ackrad-Data-Analyst/Job-App/archive/refs/heads/careerpilot-recovery.zip
+That public source archive has no personal profile. Import your private profile in the app.
+See README.md for details, optional configuration and tests.

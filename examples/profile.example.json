@@ -1,0 +1,11 @@
+{
+  "candidate": {
+    "name": "Alex Example (fictional)",
+    "headline": "Fictional civil engineering demonstration",
+    "summary": "Fictional example only. Replace with your own verified facts.",
+    "status": "unverified",
+    "allowed_on_resume": false
+  },
+  "education": [{"title": "Fictional civil engineering degree", "organization": "Example University (fictional)", "status": "excluded", "allowed_on_resume": false}],
+  "skills": [{"title": "Example GIS tool", "status": "unverified", "allowed_on_resume": false}]
+}
