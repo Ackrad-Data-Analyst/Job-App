@@ -97,3 +97,5 @@ start.* / stop.*          Local launch and stop scripts
 Background search definitions are persisted independently from the provider adapter. Saved searches run in bounded on-demand batches; a future scheduler can call the same service. OpenAI configuration is reserved server-side but no API call is made in this version.
 
 Source commits are reviewable on the recovery branch; the repository's main branch has not been replaced. Personal profile files and generated documents are excluded from source and release packaging by default.
+
+See [SETUP-VALIDATION.md](SETUP-VALIDATION.md) for the recovery test results and platform limitations.
