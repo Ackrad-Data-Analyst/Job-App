@@ -1,7 +1,17 @@
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import JSON, Boolean, CheckConstraint, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    CheckConstraint,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -75,8 +85,16 @@ class Rule(CareerFact, Base):
     __tablename__ = "profile_rules"
 
 
-FACTS = {"experience": Experience, "education": Education, "skills": Skill, "projects": Project,
-         "certifications": Certification, "languages": Language, "identity": Identity, "rules": Rule}
+FACTS = {
+    "experience": Experience,
+    "education": Education,
+    "skills": Skill,
+    "projects": Project,
+    "certifications": Certification,
+    "languages": Language,
+    "identity": Identity,
+    "rules": Rule,
+}
 
 
 class Preferences(Record, Base):
@@ -118,7 +136,18 @@ class Vacancy(Record, Base):
     fingerprint: Mapped[str] = mapped_column(String(64), index=True)
 
 
-STAGES = ["Discovered", "Under Review", "Shortlisted", "Draft Ready", "Approved", "Submitted", "Interview", "Offer", "Rejected", "Withdrawn"]
+STAGES = [
+    "Discovered",
+    "Under Review",
+    "Shortlisted",
+    "Draft Ready",
+    "Approved",
+    "Submitted",
+    "Interview",
+    "Offer",
+    "Rejected",
+    "Withdrawn",
+]
 
 
 class Application(Record, Base):
