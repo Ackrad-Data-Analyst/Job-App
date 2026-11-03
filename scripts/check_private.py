@@ -31,7 +31,8 @@ def check(paths, read):
             set(p.parts) & BAD_PATHS
             or (p.name.startswith(".env") and p.name != ".env.example")
             or p.suffix.lower() in {".db", ".sqlite", ".docx", ".pdf", ".csv"}
-            or p.name == "profile.seed.json"
+            or p.name in {"profile.seed.json", "profile-correction.json"}
+            or p.name.startswith("CareerPilot-Update-Profile")
         ):
             errors.append(name + ": private/generated path")
             continue

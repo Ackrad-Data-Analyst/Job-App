@@ -110,3 +110,9 @@ Background search definitions are persisted independently from the provider adap
 Source commits are reviewable on the recovery branch; the repository's main branch has not been replaced. Personal profile files and generated documents are excluded from source and release packaging by default.
 
 See [SETUP-VALIDATION.md](SETUP-VALIDATION.md) for the recovery test results and platform limitations.
+
+## Correct an already populated profile
+
+The ordinary profile importer preserves populated profiles. An explicit correction uses `careerpilot.profile_update`: stop the app first, then run the module from `apps/api` with the private corrected JSON path. It validates the entire input, saves a full SQLite database backup under `data/private/backups/`, and matches existing facts by category/title/organisation so their IDs and application references remain intact. Unmatched existing facts are retained. Owner-entered salary comparisons and optional document preferences are preserved. Unsent drafts are superseded and Approved/Draft Ready applications return to Under Review; completed submission history is retained.
+
+A private standalone updater can be generated with `python3 scripts/build_profile_update.py PRIVATE_JSON PRIVATE_OUTPUT.py`. It finds the installed app in its own directory, the working directory, or the default Windows Downloads location; `--app` selects another folder. It automatically uses the app's existing Python environment. The generated file contains personal information and must never be committed or published. Public source includes only the generic updater and fictional tests.
