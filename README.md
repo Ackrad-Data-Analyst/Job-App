@@ -57,6 +57,17 @@ SQLite is the local default. For a future private PostgreSQL/Supabase instance, 
 
 Security boundaries: both services bind to loopback; private APIs require a server token; a one-use five-minute browser unlock creates an eight-hour HttpOnly SameSite cookie; mutations require the configured origin. Do not expose these ports to a LAN or the internet. The app does not encrypt your disk: protect your computer account and private backups.
 
+## Apply the Next.js security patch to an existing copy
+
+Version 16.4.4 is now pinned in the source and lockfile. If an earlier copy reports 16.4.0, stop CareerPilot and open Command Prompt in the extracted app folder. Run:
+
+```bat
+npm install --workspace apps/web --save-exact next@16.4.4
+start.bat
+```
+
+The launcher detects the changed lockfile and rebuilds while preserving `data/`. The framework's “Upgrade now” prompt can copy instructions when no coding agent is installed; that message does not mean the dependency was updated. Use the command above to install the patch directly.
+
 ## Development and tests
 
 Requirements: Python 3.12+, Node.js 22.13+ (24 LTS recommended), and [uv](https://docs.astral.sh/uv/) for development. The normal launcher installs uv in a local bootstrap environment if it is missing.

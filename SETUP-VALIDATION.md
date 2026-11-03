@@ -16,3 +16,7 @@ Completed checks:
 Provider adapters were tested with published-schema fixtures and explicit failure cases. A live AECOM read could not be verified from this recovery cloud network. No live vacancies were preloaded and no substitute vacancies were invented. Recheck boards in Job sources on the local computer.
 
 Native Windows/macOS execution, Microsoft Word automation and PostgreSQL/Supabase execution were not available in this Linux environment. Windows/macOS launchers are included; PDF fallback and SQLite local operation were exercised. Local use requires no hosting or cloud publication.
+
+## 3 November 2026 maintenance check
+
+Next.js and its lockfile were upgraded from 16.4.0 to the offered 16.4.4 security patch. TypeScript checking, the production build, all five session unit tests and all eight desktop/mobile browser tests passed against 16.4.4. The private recovery block was decoded, validated and imported into an isolated empty database: all 71 facts and their restrictions were retained; importing over an existing profile was blocked. No personal records were added to Git.
