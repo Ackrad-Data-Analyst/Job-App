@@ -1053,3 +1053,19 @@ footer {
     font-size: 22px;
   }
 }
+.employer-directory p,
+.employer-directory a {
+  overflow-wrap: anywhere;
+}
+.employer-directory .directory-controls {
+  margin: 18px 0;
+}
+.employer-directory .cards {
+  margin: 18px 0;
+}
+.employer-directory .role-card p {
+  font-size: 12px;
+}
+.employer-directory .role-card summary {
+  font-size: 11px;
+}

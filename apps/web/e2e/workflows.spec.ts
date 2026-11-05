@@ -122,3 +122,132 @@ test("unauthenticated browser cannot read personal API data", async ({
   expect(r.status()).toBe(401);
   await ctx.close();
 });
+
+test("expanded employer directory and degree pathways are usable", async ({
+  page,
+}, info) => {
+  await page.goto("/sources");
+  await expect(
+    page.getByRole("heading", {
+      name: "Direct employer directory",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.getByLabel("Employer market").selectOption("Canada");
+  await page.getByLabel("Planning location focus").selectOption("Regina");
+  await page.getByLabel("Employer or domain", { exact: true }).fill("Clifton");
+  await expect(
+    page.getByRole("heading", {
+      name: "Clifton Engineering Group",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Candidate official link; not checked in this installation.",
+      { exact: false },
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Employer careers", exact: false }),
+  ).toHaveAttribute("href", "https://www.clifton.ca/careers/");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: "test-results/" + info.project.name + "-employer-directory.png",
+    fullPage: true,
+  });
+  await page.goto("/roles");
+  await expect(
+    page.getByRole("heading", {
+      name: "Civil engineering + business analytics",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.goto("/preferences");
+  await expect(
+    page.getByLabel("Normal maximum posting age (days)"),
+  ).toHaveValue("5");
+  await expect(
+    page.getByLabel("Maximum reported application count", { exact: true }),
+  ).toHaveValue("100");
+  await expect(
+    page.getByLabel("Allow older jobs only below this reported count"),
+  ).toHaveValue("20");
+});
+
+test("live-result pagination does not turn employer targets into vacancies", async ({
+  page,
+}) => {
+  await page.route("**/api/search", async (route) => {
+    const query = route.request().postDataJSON();
+    const offset = query.offset || 0;
+    const jobs = [
+      {
+        title: "Fictional pagination vacancy " + (offset + 1),
+        employer: "Fictional test employer",
+        country: "Canada",
+        location: "Regina, Saskatchewan",
+        url: "https://example.invalid/jobs/" + offset,
+        description: "Fictional browser-test response only.",
+        salary: "Not published",
+        source: "Fictional test fixture",
+        discovery_screen: {
+          age_days: 1,
+          count_note: "Applicant count not reported.",
+          reason: "Fresh source date; count unknown.",
+        },
+      },
+    ];
+    await route.fulfill({
+      json: {
+        jobs,
+        total: 2,
+        offset,
+        has_more: offset === 0,
+        next_offset: offset === 0 ? 1 : null,
+        errors: [],
+        coverage: "Fictional test fixture; no live job opening.",
+        source_checks: [],
+        filtered: {},
+        retrieved: 2,
+        target_count: 0,
+        employer_targets: [],
+      },
+    });
+  });
+  await page.goto("/search");
+  await page
+    .getByRole("button", { name: "Search opportunities", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Fictional pagination vacancy 1",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Applicant count not reported.", { exact: false }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Load more live postings", exact: false })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Fictional pagination vacancy 2",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "Fictional pagination vacancy 1",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Load more live postings", exact: false }),
+  ).toHaveCount(0);
+});

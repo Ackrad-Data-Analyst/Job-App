@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { valid, sameOrigin, COOKIE } from "@/lib/session";
 const id = "[a-f0-9-]{36}";
 const allowed = new RegExp(
-  `^(ready|profile|profile-import|profile/(?:experience|education|skills|projects|certifications|languages|identity|rules)(?:/${id})?|preferences|roles|applications(?:/${id}(?:/(?:job|stage|verification|notes|documents|evidence))?)?|jobs|templates|documents/${id}(?:/approve|/download/(?:docx|pdf|txt))?|evidence/${id}/download|employers(?:/${id})?|sources(?:/bootstrap|/feeds(?:/${id}(?:/verify)?)?)?|search|capture|saved-searches(?:/${id}(?:/run)?)?|activity|reminders(?:/${id}/complete)?|tracker/export|storage)$`,
+  `^(ready|profile|profile-import|profile/(?:experience|education|skills|projects|certifications|languages|identity|rules)(?:/${id})?|preferences|roles|applications(?:/${id}(?:/(?:job|stage|verification|notes|documents|evidence))?)?|jobs|templates|documents/${id}(?:/approve|/download/(?:docx|pdf|txt))?|evidence/${id}/download|employers(?:/${id})?|sources(?:/catalog(?:/check)?|/bootstrap|/feeds(?:/${id}(?:/verify)?)?)?|search|capture|saved-searches(?:/${id}(?:/run)?)?|activity|reminders(?:/${id}/complete)?|tracker/export|storage)$`,
 );
 async function proxy(
   request: NextRequest,

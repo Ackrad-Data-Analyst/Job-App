@@ -1,5 +1,7 @@
 "use client";
 import Link from "next/link";
+import { api } from "@/lib/api";
+import { EmployerDirectory, EducationPathways } from "./employer-directory";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -62,29 +64,8 @@ const NAV = [
   ["/preferences", "Preferences", SlidersHorizontal],
   ["/sources", "Job sources", ShieldCheck],
 ] as const;
-export async function api(
-  path: string,
-  body?: unknown,
-  method = "GET",
-): Promise<any> {
-  const r = await fetch("/api/" + path, {
-    method,
-    headers: { "Content-Type": "application/json" },
-    body: body === undefined ? undefined : JSON.stringify(body),
-    cache: "no-store",
-  });
-  if (!r.ok) {
-    const v = await r.json().catch(() => ({}));
-    throw new Error(
-      typeof v.detail === "string"
-        ? v.detail
-        : Array.isArray(v.detail)
-          ? v.detail.map((x: R) => x.msg).join("; ")
-          : "Unable to complete the request.",
-    );
-  }
-  return r.status === 204 ? undefined : r.json();
-}
+export { api } from "@/lib/api";
+
 function form(e: React.FormEvent<HTMLFormElement>): R {
   return Object.fromEntries(new FormData(e.currentTarget));
 }
@@ -255,6 +236,10 @@ function Fit({ value: f }: { value: R }) {
                 {f[k].confirmed.join(", ") || "No extracted matches"}
               </p>
               <p>
+                <b>Supporting use under supervision:</b>{" "}
+                {f[k].supporting?.join(", ") || "None extracted"}
+              </p>
+              <p>
                 <b>Learning:</b> {f[k].learning.join(", ") || "None extracted"}
               </p>
               <p>
@@ -270,6 +255,17 @@ function Fit({ value: f }: { value: R }) {
         <br />
         {f.authorization_note}
       </p>
+      {f.opt_alignment && (
+        <p className="notice">
+          <b>OPT degree relationship: {f.opt_alignment.status}</b>
+          <br />
+          {f.opt_alignment.explanation}
+          <br />
+          <a href={f.opt_alignment.reference} target="_blank" rel="noreferrer">
+            USCIS OPT reference ↗
+          </a>
+        </p>
+      )}
       {f.salary_comparison && (
         <div className="salary">
           <b>
@@ -279,6 +275,25 @@ function Fit({ value: f }: { value: R }) {
           <p>
             {f.salary_comparison.label} {f.salary_comparison.minimum_status}
           </p>
+          {f.salary_comparison.country_minimum && (
+            <p>
+              Country floor: {f.salary_comparison.country_minimum.value}{" "}
+              {f.salary_comparison.country_minimum.currency}/
+              {f.salary_comparison.country_minimum.period}
+            </p>
+          )}
+          {f.salary_comparison.country_comparison && (
+            <p>
+              Rate in your floor's units:{" "}
+              {f.salary_comparison.country_comparison.min ?? "?"}–
+              {f.salary_comparison.country_comparison.max ?? "?"}{" "}
+              {f.salary_comparison.country_comparison.currency}/
+              {f.salary_comparison.country_comparison.period}
+            </p>
+          )}
+          {f.salary_comparison.country_comparison && (
+            <p>{f.salary_comparison.country_comparison.method}</p>
+          )}
         </div>
       )}
       <p className="fine">
@@ -561,7 +576,15 @@ function Overview(c: Ctx) {
               {c.data.roles.slice(0, 3).map((r: R) => (
                 <Link
                   className="role-card"
-                  href={"/search?title=" + encodeURIComponent(r.title)}
+                  href={
+                    "/search?title=" +
+                    encodeURIComponent(r.title) +
+                    (/healthcare|hospital|business intelligence|operations analyst|supply chain/i.test(
+                      r.title,
+                    )
+                      ? "&track=analytics"
+                      : "")
+                  }
                   key={r.title}
                 >
                   <small>
@@ -1184,6 +1207,26 @@ function Preferences(c: Ctx) {
           }
           const body = {
             ...p,
+            home_base: d.home_base,
+            planned_move_date: d.planned_move_date,
+            mobility_notes: d.mobility_notes,
+            max_job_age_days: Number(d.max_job_age_days),
+            max_applicant_count: Number(d.max_applicant_count),
+            older_job_applicant_threshold: Number(
+              d.older_job_applicant_threshold,
+            ),
+            include_unknown_applicant_count:
+              d.include_unknown_applicant_count === "on",
+            include_unknown_posted_date: d.include_unknown_posted_date === "on",
+            use_apply_clicks_as_proxy: d.use_apply_clicks_as_proxy === "on",
+            max_commute_minutes: d.max_commute_minutes
+              ? Number(d.max_commute_minutes)
+              : null,
+            relocation_preference: d.relocation_preference,
+            location_priorities: String(d.location_priorities || "")
+              .split(",")
+              .map((x) => x.trim())
+              .filter(Boolean),
             countries,
             target_titles: lines("target_titles"),
             interests: String(d.interests)
@@ -1321,7 +1364,7 @@ function Preferences(c: Ctx) {
                   </select>
                 </label>
                 <label>
-                  Minimum annual salary (optional)
+                  Minimum advertised pay, before tax (optional)
                   <input
                     type="number"
                     min={0}
@@ -1332,6 +1375,48 @@ function Preferences(c: Ctx) {
                           ? Number(e.target.value)
                           : null,
                       })
+                    }
+                  />
+                </label>
+                <label>
+                  Minimum-pay period
+                  <select
+                    value={x.min_salary_period || "year"}
+                    onChange={(e) =>
+                      change(i, { min_salary_period: e.target.value })
+                    }
+                  >
+                    {["month", "year", "hour"].map((v) => (
+                      <option key={v}>{v}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Work-authorisation route (private)
+                  <input
+                    value={x.authorization_route || ""}
+                    onChange={(e) =>
+                      change(i, { authorization_route: e.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  Work start not before
+                  <input
+                    type="date"
+                    value={x.work_start_not_before || ""}
+                    onChange={(e) =>
+                      change(i, { work_start_not_before: e.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  Authorisation expiry (leave blank if not recorded)
+                  <input
+                    type="date"
+                    value={x.authorization_expiry || ""}
+                    onChange={(e) =>
+                      change(i, { authorization_expiry: e.target.value })
                     }
                   />
                 </label>
@@ -1366,6 +1451,29 @@ function Preferences(c: Ctx) {
                 />
                 Include this country in searches
               </label>
+              <label className="check">
+                <input
+                  type="checkbox"
+                  checked={x.allow_lower_for_early_career || false}
+                  onChange={(e) =>
+                    change(i, {
+                      allow_lower_for_early_career: e.target.checked,
+                    })
+                  }
+                />
+                Retain below-floor early-career/internship roles for manual
+                review; progression is not assumed
+              </label>
+              <label className="check">
+                <input
+                  type="checkbox"
+                  checked={x.allow_internships || false}
+                  onChange={(e) =>
+                    change(i, { allow_internships: e.target.checked })
+                  }
+                />
+                Allow relevant internships in this country
+              </label>
               <label>
                 Private authorisation note
                 <textarea
@@ -1381,6 +1489,96 @@ function Preferences(c: Ctx) {
           ))}
         </section>
         <section className="panel pad stack">
+          <h2>Home base and location preferences</h2>
+          <p className="fine">
+            Search settings only. These fields do not change the location on
+            your resume or establish work eligibility.
+          </p>
+          <div className="grid">
+            <Field
+              name="home_base"
+              label="Planned home base"
+              value={p.home_base || "Regina, Saskatchewan"}
+            />
+            <Field
+              name="location_priorities"
+              label="Location priorities, comma-separated"
+              value={(
+                p.location_priorities || [
+                  "Regina",
+                  "Saskatchewan",
+                  "Alberta",
+                  "Ontario",
+                ]
+              ).join(", ")}
+            />
+            <Field
+              name="max_commute_minutes"
+              label="Maximum daily commute in minutes (leave blank until decided)"
+              type="number"
+              value={p.max_commute_minutes ?? ""}
+            />
+            <Select
+              name="relocation_preference"
+              label="Relocation / rotation preference"
+              value={p.relocation_preference || "unspecified"}
+              options={["unspecified", "near home", "open", "rotational"]}
+            />
+          </div>
+          <Field
+            name="planned_move_date"
+            label="Planned move date (private)"
+            type="date"
+            value={p.planned_move_date || ""}
+          />
+          <Field
+            name="mobility_notes"
+            label="Private mobility preferences"
+            type="textarea"
+            value={p.mobility_notes || ""}
+          />
+          <h2>Freshness and competition</h2>
+          <div className="grid">
+            <Field
+              name="max_job_age_days"
+              label="Normal maximum posting age (days)"
+              type="number"
+              value={p.max_job_age_days ?? 5}
+            />
+            <Field
+              name="max_applicant_count"
+              label="Maximum reported application count"
+              type="number"
+              value={p.max_applicant_count ?? 100}
+            />
+            <Field
+              name="older_job_applicant_threshold"
+              label="Allow older jobs only below this reported count"
+              type="number"
+              value={p.older_job_applicant_threshold ?? 20}
+            />
+          </div>
+          <Check
+            name="include_unknown_applicant_count"
+            label="Include fresh employer jobs with applicant count not reported"
+            value={p.include_unknown_applicant_count ?? true}
+          />
+          <Check
+            name="include_unknown_posted_date"
+            label="Also include unknown posting dates (explicit freshness exception)"
+            value={p.include_unknown_posted_date ?? false}
+          />
+          <Check
+            name="use_apply_clicks_as_proxy"
+            label="Use clearly labelled apply-click counts as a competition proxy"
+            value={p.use_apply_clicks_as_proxy ?? false}
+          />
+          <p className="fine">
+            Apply clicks are not completed applications. Employer sites often
+            publish no counts. Updated dates are not treated as new posting
+            dates. Older posts need a qualifying published count below your
+            exception threshold.
+          </p>
           <h2>Career focus</h2>
           <div className="grid">
             <Field
@@ -1488,6 +1686,7 @@ function Roles(c: Ctx) {
         title="Explore your career paths."
         description="Career directions and gaps, not live vacancies or guaranteed eligibility."
       />
+      <EducationPathways catalog={c.data.sources.catalog} />
       {[...new Set(c.data.roles.map((r: R) => r.family))].map((f) => (
         <section className="panel pad" key={String(f)}>
           <h2>{String(f)}</h2>
@@ -1519,7 +1718,17 @@ function Roles(c: Ctx) {
                       <p key={x}>Check: {x}</p>
                     ))}
                   </details>
-                  <Link href={"/search?title=" + encodeURIComponent(r.title)}>
+                  <Link
+                    href={
+                      "/search?title=" +
+                      encodeURIComponent(r.title) +
+                      (/healthcare|hospital|business intelligence|operations analyst|supply chain/i.test(
+                        r.title,
+                      )
+                        ? "&track=analytics"
+                        : "")
+                    }
+                  >
                     Search this title →
                   </Link>
                 </article>
@@ -1537,7 +1746,13 @@ function Sources(c: Ctx) {
       <Heading
         eyebrow="GO TO THE SOURCE"
         title="Build a reliable search."
-        description="Public employer feeds and official APIs. Source failures are shown, never replaced with fictional jobs."
+        description="Direct employer career pages, documented employer feeds and government sources. Page checks and live vacancies are shown separately."
+      />
+      <EmployerDirectory
+        catalog={s.catalog}
+        preferences={c.data.preferences}
+        busy={c.busy}
+        action={c.action}
       />
       <section className="panel pad">
         <div className="section-heading">
@@ -1559,8 +1774,9 @@ function Sources(c: Ctx) {
           </button>
         </div>
         <p className="muted">
-          Starter board metadata was checked on 16 October 2026. Recheck before
-          relying on availability. No vacancies are preloaded.
+          Legacy starter metadata dates from 16 October 2026. Recheck the source
+          before relying on it. The directory above covers additional employers;
+          only successfully checked supported feeds enter automatic searches.
         </p>
         {s.feeds.map((f: R) => (
           <article className="feed row" key={f.id}>
@@ -1914,6 +2130,13 @@ const emptyJob = {
   salary_currency: "",
   salary_period: "",
   closing_date: "",
+  published_at: "",
+  published_at_kind: "unknown",
+  published_at_evidence: "",
+  applicant_count: null,
+  applicant_metric: "unknown",
+  applicant_count_relation: "exact",
+  applicant_count_evidence: "",
 };
 function jobBody(d: R) {
   return {
@@ -1921,7 +2144,7 @@ function jobBody(d: R) {
     ...Object.fromEntries(
       Object.keys(emptyJob).map((k) => [
         k,
-        k === "salary_min" || k === "salary_max"
+        k === "salary_min" || k === "salary_max" || k === "applicant_count"
           ? d[k] === "" || d[k] == null
             ? null
             : Number(d[k])
@@ -1951,6 +2174,61 @@ function JobFields({ job: j }: { job: R }) {
         value={j.description}
         type="textarea"
       />
+      <details>
+        <summary>Published posting date and application-count evidence</summary>
+        <div className="grid">
+          <Field
+            name="published_at"
+            label="Published posting date or original relative date text"
+            value={j.published_at}
+          />
+          <Select
+            name="published_at_kind"
+            label="Date meaning"
+            value={j.published_at_kind || "unknown"}
+            options={[
+              "unknown",
+              "posted",
+              "released",
+              "updated",
+              "owner reported",
+            ]}
+          />
+          <Field
+            name="published_at_evidence"
+            label="Date source / evidence"
+            value={j.published_at_evidence}
+          />
+          <Field
+            name="applicant_count"
+            label="Published application or click count (blank means unknown)"
+            type="number"
+            value={j.applicant_count}
+          />
+          <Select
+            name="applicant_metric"
+            label="What the displayed number measures"
+            value={j.applicant_metric || "unknown"}
+            options={["unknown", "applications", "apply clicks"]}
+          />
+          <Select
+            name="applicant_count_relation"
+            label="Count qualifier"
+            value={j.applicant_count_relation || "exact"}
+            options={["exact", "more than", "at least", "less than"]}
+          />
+          <Field
+            name="applicant_count_evidence"
+            label="Count source / evidence"
+            value={j.applicant_count_evidence}
+          />
+        </div>
+        <p className="fine">
+          Enter only what the source displays. “People clicked apply” is not a
+          completed-application count. No counts are invented when the source
+          does not report them.
+        </p>
+      </details>
       <details>
         <summary>Source-stated pay and closing date</summary>
         <div className="grid">
@@ -2072,12 +2350,23 @@ function Capture(c: Ctx) {
 function Results({ result, c }: { result: R; c: Ctx }) {
   async function save(j: R) {
     let full = j;
-    if (j.source?.toLowerCase().includes("smartrecruiters")) {
-      full = {
-        ...j,
-        ...(await api("capture", { url: j.url, permitted: true }, "POST")),
-      };
+    if (
+      j.source?.toLowerCase().includes("smartrecruiters") ||
+      j.source?.toLowerCase().includes("workday")
+    ) {
+      const detail = await api(
+        "capture",
+        { url: j.url, permitted: true },
+        "POST",
+      );
+      full = { ...j, ...detail };
+      if (!detail.published_at) {
+        full.published_at = j.published_at;
+        full.published_at_kind = j.published_at_kind;
+        full.published_at_evidence = j.published_at_evidence;
+      }
     }
+    full.employer = full.employer || j.employer;
     const a = await api("jobs", jobBody(full), "POST");
     c.router.push("/applications/" + a.id);
   }
@@ -2107,6 +2396,42 @@ function Results({ result, c }: { result: R; c: Ctx }) {
           ))}
         </div>
       )}
+      {result.filtered && (
+        <section className="panel pad">
+          <h2>What this search covered</h2>
+          <p>
+            {result.jobs.length} displayed / {result.total} matching live
+            postings · {result.retrieved} source rows retrieved ·{" "}
+            {result.target_count} separate employer career-page targets
+          </p>
+          <details>
+            <summary>Source coverage, pagination limits and filtering</summary>
+            {result.source_checks?.map((x: R) => (
+              <p key={x.employer}>
+                <b>{x.employer}</b>: {x.status}; {x.returned} returned;{" "}
+                {x.pages ?? 0} pages
+                {x.truncated ? " · partial source window" : ""}
+              </p>
+            ))}
+            <p>
+              Excluded by rule:{" "}
+              {Object.entries(result.filtered)
+                .map(([k, v]) => `${k.replaceAll("_", " ")}: ${v}`)
+                .join(" · ")}
+            </p>
+            {Object.entries(result.screening_rejections || {}).map(
+              ([reason, count]) => (
+                <p key={reason}>
+                  {reason}: {String(count)}
+                </p>
+              ),
+            )}
+            <p>
+              No omitted source or directory link is counted as a live vacancy.
+            </p>
+          </details>
+        </section>
+      )}
       <div className="search-results">
         {result.jobs?.map((j: R, i: number) => (
           <article className="panel pad" key={j.url || i}>
@@ -2123,6 +2448,21 @@ function Results({ result, c }: { result: R; c: Ctx }) {
               <Badge value={j.fit?.recommendation || "Consider"} />
             </div>
             <p className="salary">{pay(j)}</p>
+            <p className="fine">{j.career_track}</p>
+            {j.discovery_screen && (
+              <p className="notice">
+                {j.discovery_screen.age_days == null
+                  ? "Posting date unknown"
+                  : `Posted ${j.discovery_screen.age_days} day(s) ago`}{" "}
+                · {j.discovery_screen.count_note}
+                <br />
+                {j.discovery_screen.reason}
+              </p>
+            )}
+            <p className="fine">
+              {j.location_note} {j.country_evidence}
+            </p>
+            <p className="fine">{j.foreign_applicant_evidence}</p>
             <p className="excerpt">
               {j.description || "Read the original job for full requirements."}
             </p>
@@ -2168,6 +2508,7 @@ function Results({ result, c }: { result: R; c: Ctx }) {
 }
 function SearchPage(c: Ctx) {
   const [result, setResult] = useState<R | null>(null);
+  const [lastQuery, setLastQuery] = useState<R | null>(null);
   const countries = c.data.preferences.countries
     .filter((x: R) => x.enabled)
     .map((x: R) => x.country);
@@ -2183,8 +2524,16 @@ function SearchPage(c: Ctx) {
         onSubmit={(e) => {
           e.preventDefault();
           const d = form(e);
+          const query = {
+            ...d,
+            include_unknown_country: d.include_unknown_country === "on",
+            include_stretch: d.include_stretch === "on",
+            offset: 0,
+            limit: 50,
+          };
+          setLastQuery(query);
           void c.action(
-            async () => setResult(await api("search", d, "POST")),
+            async () => setResult(await api("search", query, "POST")),
             "Search completed. Check source coverage and any errors below.",
           );
         }}
@@ -2220,25 +2569,111 @@ function SearchPage(c: Ctx) {
           />
           <Field name="region" label="City / province (optional)" />
           <Select
+            name="track"
+            label="Career track"
+            value={
+              typeof window === "undefined"
+                ? "civil"
+                : new URLSearchParams(location.search).get("track") || "civil"
+            }
+            options={["civil", "analytics", "combined"]}
+          />
+          <Select
+            name="scope"
+            label="Title coverage"
+            value="related"
+            options={["related", "domain", "exact"]}
+          />
+          <Select
+            name="region_mode"
+            label="City / province behaviour"
+            value="prefer"
+            options={["prefer", "only"]}
+          />
+          <Select
             name="source"
             label="Search source"
             value="feeds"
-            options={["feeds", "remotive", "adzuna", "usajobs"]}
+            options={["feeds", "usajobs"]}
           />
         </div>
+        <div className="grid">
+          <Check
+            name="include_unknown_country"
+            label="Also show postings whose country needs manual confirmation"
+          />
+          <Check
+            name="include_stretch"
+            label="Include senior-title stretch opportunities for manual review"
+          />
+        </div>
+        <p className="fine">
+          Related searches include title variants within the role family. Domain
+          searches cover all supported civil/infrastructure directions. Regina,
+          Saskatchewan, Alberta and Ontario are preferred; other Canadian
+          locations remain visible unless you choose “only”. Employer
+          sponsorship and permit compatibility require posting-specific
+          evidence.
+        </p>
         <div className="actions">
           <button className="btn primary" disabled={c.busy}>
             {c.busy ? "Searching…" : "Search opportunities"}
           </button>
           <Link href="/sources">Manage sources →</Link>
         </div>
+        <p className="notice">
+          Screening: normally ≤{c.data.preferences.max_job_age_days ?? 5} days
+          old; counts above {c.data.preferences.max_applicant_count ?? 100}{" "}
+          excluded; older jobs require a reported count below{" "}
+          {c.data.preferences.older_job_applicant_threshold ?? 20}. Unknown
+          counts are{" "}
+          {(c.data.preferences.include_unknown_applicant_count ?? true)
+            ? "allowed for fresh postings and labelled unknown"
+            : "excluded"}
+          . <Link href="/preferences">Change these rules →</Link>
+        </p>
         <p className="fine">
           Search uses the title and location only. Your private profile stays on
           this computer. Board coverage is limited; availability and eligibility
           require your review.
         </p>
       </form>
-      {result && <Results result={result} c={c} />}
+      {result && (
+        <>
+          <Results result={result} c={c} />
+          {result.has_more && lastQuery && (
+            <button
+              className="btn secondary"
+              disabled={c.busy}
+              onClick={() =>
+                c.action(async () => {
+                  const next = await api(
+                    "search",
+                    { ...lastQuery, offset: result.next_offset },
+                    "POST",
+                  );
+                  setResult({ ...next, jobs: [...result.jobs, ...next.jobs] });
+                }, "Next result page loaded.")
+              }
+            >
+              Load more live postings ({result.jobs.length} / {result.total})
+            </button>
+          )}
+          {result.employer_targets && (
+            <EmployerDirectory
+              catalog={{
+                ...c.data.sources.catalog,
+                employers: result.employer_targets,
+                default_country: lastQuery?.country,
+              }}
+              preferences={c.data.preferences}
+              busy={c.busy}
+              action={c.action}
+              compact
+            />
+          )}
+        </>
+      )}
       <Capture {...c} />
       <section className="panel pad">
         <h2>Saved searches</h2>
@@ -2288,7 +2723,7 @@ function SearchPage(c: Ctx) {
               />
               <Field
                 name="sources"
-                label="Sources (one per line: feeds, remotive, adzuna, usajobs)"
+                label="Sources (one per line: feeds, usajobs)"
                 value="feeds"
                 type="textarea"
               />
