@@ -95,6 +95,19 @@ def discovery_screen(job, prefs, checked_at=None):
             allowed=False, reason="Published competition count exceeds or may exceed your maximum."
         )
         return result
+    comparison_age = age
+    raw = str(job.get("published_at") or "").strip()
+    if age is not None and "T" in raw:
+        try:
+            stamp = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if stamp.tzinfo is None:
+                stamp = stamp.replace(tzinfo=UTC)
+            current = checked_at or datetime.now(UTC)
+            if isinstance(current, (int, float)):
+                current = datetime.fromtimestamp(current, UTC)
+            comparison_age = (current - stamp).total_seconds() / 86400
+        except (ValueError, TypeError):
+            pass
     low_competition = upper is not None and upper < older_threshold
     if age is None:
         if low_competition:
@@ -106,7 +119,7 @@ def discovery_screen(job, prefs, checked_at=None):
                 allowed=False,
                 reason="Posting date unknown; your freshness rule cannot be established.",
             )
-    elif age > age_limit:
+    elif comparison_age > age_limit:
         if low_competition:
             result["reason"] = (
                 "Older posting retained because its published count is below the exception threshold."

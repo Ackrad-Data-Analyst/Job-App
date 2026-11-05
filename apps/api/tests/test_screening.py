@@ -32,6 +32,7 @@ def job(age, count=None, metric="applications", relation="exact"):
     [
         (0, 0, True),
         (5, 100, True),
+        (5.1, None, False),
         (1, 101, False),
         (6, 19, True),
         (60, 0, True),
