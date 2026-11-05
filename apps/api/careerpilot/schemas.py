@@ -6,6 +6,8 @@ from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from .source_policy import is_indeed
+
 DENIED_ORG = bytes([104, 105, 101, 114, 111]).decode()
 Status = Literal["confirmed", "unverified", "excluded"]
 
@@ -79,11 +81,24 @@ class Country(Input):
     min_salary: float | None = Field(default=None, ge=0, le=100000000)
     currency: str = Field(default="CAD", pattern="^[A-Z]{3}$")
     template: str = Field(default="", max_length=80)
+    min_salary_period: Literal["year", "month", "hour"] = "year"
+    allow_lower_for_early_career: bool = False
+    allow_internships: bool = False
+    authorization_route: str = Field(default="", max_length=160)
+    work_start_not_before: str = Field(default="", max_length=10)
+    authorization_expiry: str = Field(default="", max_length=10)
+
+    @field_validator("work_start_not_before", "authorization_expiry")
+    @classmethod
+    def optional_date(cls, v):
+        if v:
+            date.fromisoformat(v)
+        return v
 
 
 class PreferencesInput(Input):
     countries: list[Country] = Field(min_length=1, max_length=30)
-    target_titles: list[str] = Field(default_factory=list, max_length=100)
+    target_titles: list[str] = Field(default_factory=list, max_length=250)
     interests: list[str] = Field(
         default_factory=lambda: ["civil engineering", "GIS", "infrastructure analytics"],
         max_length=50,
@@ -102,6 +117,21 @@ class PreferencesInput(Input):
     early_career_only: bool = True
     languages_on_resume: bool = False
     canadian_location: bool = False
+    home_base: str = Field(default="Regina, Saskatchewan", max_length=160)
+    location_priorities: list[str] = Field(
+        default_factory=lambda: ["Regina", "Saskatchewan", "Alberta", "Ontario"], max_length=20
+    )
+    max_commute_minutes: int | None = Field(default=None, ge=0, le=240)
+    relocation_preference: Literal["unspecified", "near home", "open", "rotational"] = "unspecified"
+    search_catalog_version: int = Field(default=0, ge=0)
+    planned_move_date: str = Field(default="", max_length=10)
+    mobility_notes: str = Field(default="", max_length=2000)
+    max_job_age_days: int = Field(default=5, ge=0, le=365)
+    max_applicant_count: int = Field(default=100, ge=0, le=100000)
+    older_job_applicant_threshold: int = Field(default=20, ge=1, le=100000)
+    include_unknown_applicant_count: bool = True
+    include_unknown_posted_date: bool = False
+    use_apply_clicks_as_proxy: bool = False
 
     @model_validator(mode="after")
     def lists(self):
@@ -120,7 +150,7 @@ class PreferencesInput(Input):
             for k, v in self.exchange_rates.items()
         ):
             raise ValueError("Enter positive currency rates")
-        for v in [self.exchange_rate_date, self.earliest_start]:
+        for v in [self.exchange_rate_date, self.earliest_start, self.planned_move_date]:
             if v:
                 date.fromisoformat(v)
         return self
@@ -140,9 +170,22 @@ class JobInput(Input):
     salary_currency: str = Field(default="", pattern="^([A-Z]{3})?$")
     salary_period: Literal["", "year", "month", "hour"] = ""
     closing_date: str = Field(default="", max_length=80)
+    published_at: str = Field(default="", max_length=160)
+    published_at_kind: Literal["unknown", "posted", "released", "updated", "owner reported"] = (
+        "unknown"
+    )
+    published_at_evidence: str = Field(default="", max_length=1000)
+    applicant_count: int | None = Field(default=None, ge=0, le=10000000, strict=True)
+    applicant_metric: Literal["unknown", "applications", "apply clicks"] = "unknown"
+    applicant_count_relation: Literal["exact", "more than", "at least", "less than"] = "exact"
+    applicant_count_evidence: str = Field(default="", max_length=1000)
 
     @model_validator(mode="after")
     def source_required(self):
+        if self.url and is_indeed(self.url):
+            raise ValueError(
+                "Indeed sources are excluded. Use the original employer posting or an allowed source."
+            )
         if self.url and not safe_url(self.url):
             raise ValueError("Use an HTTP/HTTPS source URL without credentials")
         if not self.url and not self.description:
@@ -173,11 +216,18 @@ class SearchInput(Input):
     country: str = Field(min_length=2, max_length=80)
     region: str = Field(default="", max_length=160)
     source: Literal["feeds", "remotive", "adzuna", "usajobs"] = "feeds"
+    scope: Literal["exact", "related", "domain"] = "related"
+    region_mode: Literal["prefer", "only"] = "prefer"
+    include_unknown_country: bool = False
+    include_stretch: bool = False
+    offset: int = Field(default=0, ge=0, le=10000)
+    limit: int = Field(default=50, ge=1, le=200)
+    track: Literal["civil", "analytics", "combined"] = "civil"
 
 
 class FeedInput(Input):
     employer: str = Field(min_length=2, max_length=240)
-    provider: Literal["smartrecruiters", "greenhouse", "lever", "ashby"]
+    provider: Literal["smartrecruiters", "greenhouse", "lever", "ashby", "workday"]
     slug: str = Field(pattern="^[A-Za-z0-9_-]{1,160}$")
 
 

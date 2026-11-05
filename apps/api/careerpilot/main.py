@@ -20,6 +20,7 @@ from sqlalchemy import desc, select, text
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import StaleDataError
 
+from .catalog import BY_KEY, check_batch, view_catalog
 from .config import DATA, OUTPUTS, PRIVATE, database, settings
 from .documents import TEMPLATES, check, compose, write_files
 from .initialize import STARTERS, import_seed
@@ -671,33 +672,46 @@ def sources(db: Session = Depends(database)):
         "providers": {
             k: {
                 "docs": v[1],
-                "countries": "Employer-defined worldwide; first 100/title/country for SmartRecruiters, first 1,000 for other boards",
+                "countries": "Published employer markets; up to 10 pages for paged APIs and 5,000 rows for whole-board APIs. Limits and failed sources appear in each search.",
             }
             for k, v in PUBLIC.items()
         },
         "apis": [
             {
-                "name": "Adzuna",
-                "countries": "Canada, USA, Australia, UK, New Zealand, Italy",
-                "configured": bool(cfg.adzuna_app_id and cfg.adzuna_app_key),
-                "docs": "https://developer.adzuna.com/",
-            },
-            {
                 "name": "USAJOBS",
-                "countries": "USA federal only",
+                "countries": "US federal only; many roles restrict citizenship or clearance. Not a primary source for a non-citizen search.",
                 "configured": bool(cfg.usajobs_api_key and cfg.usajobs_email),
                 "docs": "https://developer.usajobs.gov/",
-            },
-            {
-                "name": "Remotive",
-                "countries": "Remote only; source geography restrictions apply",
-                "configured": True,
-                "docs": "https://github.com/remotive-com/remote-jobs-api",
-            },
+            }
         ],
+        "catalog": view_catalog(db, prefs(db)),
+        "source_policy": "Direct employers and government sources only. Indeed, Adzuna and Remotive are excluded from discovery.",
         "openai_configured": bool(cfg.openai_api_key),
         "ai_mode": "Local rules and extractive drafting; OpenAI calls and daily scheduling are disabled.",
     }
+
+
+class CatalogCheckInput(Input):
+    keys: list[str] = Field(min_length=1, max_length=8)
+
+
+@api.get("/sources/catalog")
+def employer_catalog(db: Session = Depends(database)):
+    return view_catalog(db, prefs(db))
+
+
+@api.post("/sources/catalog/check")
+async def check_employers(body: CatalogCheckInput, db: Session = Depends(database)):
+    if any(k not in BY_KEY for k in body.keys):
+        raise HTTPException(422, "Unknown employer catalogue entry")
+    result = await check_batch(db, list(dict.fromkeys(body.keys)), providers)
+    log(
+        db,
+        "career_pages_checked",
+        "Owner requested bounded official career-page checks. Only publicly linked, successfully checked supported feeds were enabled.",
+    )
+    commit(db)
+    return result
 
 
 @api.post("/sources/feeds", status_code=201)

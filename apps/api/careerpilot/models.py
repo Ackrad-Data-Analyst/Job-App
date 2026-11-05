@@ -133,6 +133,13 @@ class Vacancy(Record, Base):
     closing_date: Mapped[str] = mapped_column(String(80), default="")
     verification: Mapped[str] = mapped_column(String(20), default="unverified")
     is_demo: Mapped[bool] = mapped_column(Boolean, default=False)
+    published_at: Mapped[str] = mapped_column(String(160), default="")
+    published_at_kind: Mapped[str] = mapped_column(String(30), default="unknown")
+    published_at_evidence: Mapped[str] = mapped_column(Text, default="")
+    applicant_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    applicant_metric: Mapped[str] = mapped_column(String(30), default="unknown")
+    applicant_count_relation: Mapped[str] = mapped_column(String(30), default="exact")
+    applicant_count_evidence: Mapped[str] = mapped_column(Text, default="")
     fingerprint: Mapped[str] = mapped_column(String(64), index=True)
 
 
@@ -223,3 +230,14 @@ class Evidence(Record, Base):
     application_id: Mapped[str] = mapped_column(ForeignKey("applications.id"))
     filename: Mapped[str] = mapped_column(String(240))
     storage_key: Mapped[str] = mapped_column(String(36))
+
+
+class SourceVerification(Record, Base):
+    __tablename__ = "source_verifications"
+    catalog_key: Mapped[str] = mapped_column(String(160), unique=True)
+    state: Mapped[str] = mapped_column(String(30), default="unchecked")
+    checked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    final_url: Mapped[str] = mapped_column(String(2048), default="")
+    page_title: Mapped[str] = mapped_column(String(300), default="")
+    message: Mapped[str] = mapped_column(Text, default="")
+    feed_ids: Mapped[list] = mapped_column(JSON, default=list)

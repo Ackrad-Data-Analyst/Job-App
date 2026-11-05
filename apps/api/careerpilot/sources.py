@@ -18,9 +18,13 @@ import httpx
 from sqlalchemy import select
 
 from .config import settings
-from .matching import SENIOR, domain, fit, links, prefs
+from .locations import country_for, has, region_rank
+from .matching import SENIOR, analytics_domain, domain, fit, links, prefs
 from .models import Feed
 from .schemas import DENIED_ORG, safe_url
+from .screening import discovery_screen
+from .source_policy import is_indeed
+from .taxonomy import family_terms
 
 CODES = {
     "Canada": "ca",
@@ -35,6 +39,7 @@ CODES = {
     "Zambia": "zm",
 }
 PUBLIC = {
+    "workday": ("", "https://www.workday.com/en-us/products/talent-management/recruiting.html"),
     "smartrecruiters": (
         "https://api.smartrecruiters.com/v1/companies/{slug}/postings",
         "https://developers.smartrecruiters.com/docs/posting-api",
@@ -183,120 +188,491 @@ class Providers:
     def __init__(self, transport=None):
         self.transport = transport
         self.cache = {}
-        self.lock = asyncio.Lock()
 
     async def feed(self, provider, slug, employer, title="", country=""):
         if provider not in PUBLIC or not re.fullmatch(r"[A-Za-z0-9_-]{1,160}", slug):
             raise ValueError("Unsupported public feed or invalid slug")
         key = (provider, slug, title, country)
-        async with self.lock:
-            cached = self.cache.get(key)
-            if cached and time.monotonic() - cached[0] < 300:
-                return cached[1]
-            url = PUBLIC[provider][0].format(slug=slug)
-            params = (
-                {"limit": 100, "q": title, "country": CODES.get(country, "")}
-                if provider == "smartrecruiters"
-                else None
-            )
-            try:
-                async with httpx.AsyncClient(
-                    timeout=20,
-                    follow_redirects=False,
-                    transport=self.transport,
-                    headers={"User-Agent": "CareerPilot/0.3"},
-                ) as client:
-                    body = json.loads(await read(client, url, params))
-                if provider != "lever" and not isinstance(body, dict):
-                    raise ValueError("Unsupported feed schema")
-                rows = (
-                    body
-                    if provider == "lever"
-                    else body.get(
-                        {"smartrecruiters": "content", "greenhouse": "jobs", "ashby": "jobs"}[
-                            provider
-                        ]
-                    )
-                )
-                if not isinstance(rows, list):
-                    raise ValueError("Unsupported feed schema")
-                jobs = []
-                for row in rows[:1000]:
-                    if not isinstance(row, dict):
-                        continue
-                    loc = row.get("location") if isinstance(row.get("location"), dict) else {}
-                    cat = row.get("categories") if isinstance(row.get("categories"), dict) else {}
-                    if provider == "smartrecruiters":
-                        jobtitle = row.get("name")
-                        identifier = str(row.get("id", ""))
-                        if not re.fullmatch("[A-Za-z0-9-]{1,160}", identifier):
-                            continue
-                        url = f"https://jobs.smartrecruiters.com/{slug}/{identifier}"
-                        code = str(loc.get("country", ""))
-                        name = next((n for n, c in CODES.items() if c == code.lower()), code)
-                        location = ", ".join(
-                            dict.fromkeys(
-                                str(x) for x in [loc.get("city"), loc.get("region"), name] if x
-                            )
-                        )
-                        description = (
-                            "Open the original for full requirements. Public listing summary: "
-                            + str(
-                                row.get("department", {}).get("label", "")
-                                if isinstance(row.get("department"), dict)
-                                else ""
-                            )
-                        )
-                    elif provider == "greenhouse":
-                        jobtitle = row.get("title")
-                        url = row.get("absolute_url", "")
-                        location = loc.get("name", "")
-                        description = row.get("content", "")
-                    elif provider == "lever":
-                        jobtitle = row.get("text")
-                        url = row.get("hostedUrl", "")
-                        location = cat.get("location", "")
-                        description = (
-                            str(row.get("descriptionPlain") or row.get("description") or "")
-                            + "\n"
-                            + "\n".join(
-                                plain(x.get("content", ""))
-                                for x in (
-                                    row.get("lists") if isinstance(row.get("lists"), list) else []
-                                )
-                                if isinstance(x, dict)
-                            )
-                        )
-                    else:
-                        jobtitle = row.get("title")
-                        url = row.get("jobUrl", "")
-                        location = str(row.get("location", ""))
-                        description = row.get("descriptionPlain") or row.get("descriptionHtml", "")
-                    if not isinstance(jobtitle, str) or not safe_url(url):
-                        continue
-                    jobs.append(
+        cached = self.cache.get(key)
+        if cached and time.monotonic() - cached[0] < 300:
+            return cached[1]
+        if provider == "workday":
+            from .workday import search_board
+
+            jobs, meta = await search_board(slug, employer, title, self.transport)
+            self.cache[key] = (time.monotonic(), jobs)
+            if not hasattr(self, "feed_meta"):
+                self.feed_meta = {}
+            self.feed_meta[key] = meta
+            if len(self.cache) > 100:
+                stale = next(iter(self.cache))
+                self.cache.pop(stale)
+                self.feed_meta.pop(stale, None)
+            return jobs
+        api_url = PUBLIC[provider][0].format(slug=slug)
+        jobs = []
+        seen_pages = set()
+        started = time.monotonic()
+        truncated = False
+        pages = 0
+        try:
+            async with httpx.AsyncClient(
+                timeout=15,
+                follow_redirects=False,
+                transport=self.transport,
+                headers={"User-Agent": "CareerPilot/0.4"},
+            ) as client:
+                for page in range(10 if provider in {"smartrecruiters", "lever"} else 1):
+                    params = (
                         {
-                            "title": plain(jobtitle)[:240],
-                            "employer": employer,
-                            "url": url,
-                            "location": plain(location)[:240],
-                            "country": name if provider == "smartrecruiters" else "",
-                            "description": plain(description),
-                            "salary": "Not supplied in listing fields",
-                            "source": provider + " public feed: " + employer,
-                            "verification": "unverified",
+                            "limit": 100,
+                            "offset": page * 100,
+                            "q": title,
+                            "country": CODES.get(country, ""),
                         }
+                        if provider == "smartrecruiters"
+                        else (
+                            {"mode": "json", "limit": 100, "skip": page * 100}
+                            if provider == "lever"
+                            else None
+                        )
                     )
-                if rows and not jobs:
-                    raise ValueError("No valid published listings in feed schema")
-            except (httpx.HTTPError, TypeError, KeyError, json.JSONDecodeError):
+                    body = json.loads(await read(client, api_url, params))
+                    if provider != "lever" and not isinstance(body, dict):
+                        raise ValueError("Unsupported feed schema")
+                    rows = (
+                        body
+                        if provider == "lever"
+                        else body.get(
+                            {"smartrecruiters": "content", "greenhouse": "jobs", "ashby": "jobs"}[
+                                provider
+                            ]
+                        )
+                    )
+                    if not isinstance(rows, list):
+                        raise ValueError("Unsupported feed schema")
+                    page_hash = hashlib.sha256(
+                        json.dumps(rows, sort_keys=True).encode()
+                    ).hexdigest()
+                    if page_hash in seen_pages:
+                        truncated = bool(rows)
+                        break
+                    seen_pages.add(page_hash)
+                    pages += 1
+                    if len(rows) > 5000:
+                        truncated = True
+                    rows = rows[:5000]
+                    for row in rows:
+                        if (
+                            not isinstance(row, dict)
+                            or row.get("active") is False
+                            or row.get("isListed") is False
+                        ):
+                            continue
+                        loc = row.get("location") if isinstance(row.get("location"), dict) else {}
+                        cat = (
+                            row.get("categories") if isinstance(row.get("categories"), dict) else {}
+                        )
+                        if provider == "smartrecruiters":
+                            jobtitle = row.get("name")
+                            identifier = str(row.get("id", ""))
+                            if not re.fullmatch("[A-Za-z0-9-]{1,160}", identifier):
+                                continue
+                            url = f"https://jobs.smartrecruiters.com/{slug}/{identifier}"
+                            code = str(loc.get("country", ""))
+                            name = next((n for n, c in CODES.items() if c == code.lower()), code)
+                            location = ", ".join(
+                                dict.fromkeys(
+                                    str(x) for x in [loc.get("city"), loc.get("region"), name] if x
+                                )
+                            )
+                            description = (
+                                "Open the original for full requirements. Public listing summary: "
+                                + str(
+                                    row.get("department", {}).get("label", "")
+                                    if isinstance(row.get("department"), dict)
+                                    else ""
+                                )
+                            )
+                        elif provider == "greenhouse":
+                            jobtitle = row.get("title")
+                            url = row.get("absolute_url", "")
+                            location = loc.get("name", "")
+                            description = row.get("content", "")
+                        elif provider == "lever":
+                            jobtitle = row.get("text")
+                            url = row.get("hostedUrl", "")
+                            location = cat.get("location", "")
+                            description = (
+                                str(row.get("descriptionPlain") or row.get("description") or "")
+                                + "\n"
+                                + "\n".join(
+                                    plain(x.get("content", ""))
+                                    for x in (
+                                        row.get("lists")
+                                        if isinstance(row.get("lists"), list)
+                                        else []
+                                    )
+                                    if isinstance(x, dict)
+                                )
+                            )
+                        else:
+                            jobtitle = row.get("title")
+                            url = row.get("jobUrl", "")
+                            location = str(row.get("location", ""))
+                            description = row.get("descriptionPlain") or row.get(
+                                "descriptionHtml", ""
+                            )
+                        if not isinstance(jobtitle, str) or not safe_url(url):
+                            continue
+                        explicit = (
+                            name if provider == "smartrecruiters" else str(row.get("country", ""))
+                        )
+                        country_name, country_evidence = country_for(plain(location), explicit)
+                        jobs.append(
+                            {
+                                "title": plain(jobtitle)[:240],
+                                "employer": employer,
+                                "url": url,
+                                "location": plain(location)[:240],
+                                "country": country_name,
+                                "country_evidence": country_evidence,
+                                "description_complete": provider != "smartrecruiters",
+                                "employment_type": str(
+                                    (row.get("typeOfEmployment") or {}).get("label", "")
+                                )
+                                if isinstance(row.get("typeOfEmployment"), dict)
+                                else str(row.get("employmentType", cat.get("commitment", ""))),
+                                "published_at": str(
+                                    row.get("releasedDate")
+                                    or row.get("publishedAt")
+                                    or row.get("first_published_at")
+                                    or row.get("updated_at")
+                                    or ""
+                                ),
+                                "published_at_kind": "released"
+                                if row.get("releasedDate")
+                                else "posted"
+                                if row.get("publishedAt") or row.get("first_published_at")
+                                else "updated"
+                                if row.get("updated_at")
+                                else "unknown",
+                                "published_at_evidence": "Provider releasedDate/publishedAt/first_published_at field; update-only dates remain classified as updates.",
+                                "source_checked_at": time.time(),
+                                "description": plain(description),
+                                "salary": "Not supplied in listing fields",
+                                "source": provider + " public feed: " + employer,
+                                "verification": "unverified",
+                            }
+                        )
+                    if rows and not jobs:
+                        raise ValueError("No valid published listings in feed schema")
+                    if provider not in {"smartrecruiters", "lever"} or len(rows) < 100:
+                        break
+                    total = body.get("totalFound") if isinstance(body, dict) else None
+                    if isinstance(total, int) and (page + 1) * 100 >= total:
+                        break
+                    if page == 9 or time.monotonic() - started > 25:
+                        truncated = True
+                        break
+        except (
+            httpx.HTTPError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            json.JSONDecodeError,
+        ):
+            if not jobs:
                 raise ValueError(
                     "Public feed unavailable or returned unsupported data. Check the published slug."
                 ) from None
-            self.cache[key] = (time.monotonic(), jobs)
-            if len(self.cache) > 100:
-                self.cache.pop(next(iter(self.cache)))
-            return jobs
+            truncated = True
+        self.cache[key] = (time.monotonic(), unique(jobs))
+        if not hasattr(self, "feed_meta"):
+            self.feed_meta = {}
+        self.feed_meta[key] = {
+            "pages": pages,
+            "truncated": truncated,
+            "fetched": len(jobs),
+            "checked_at": time.time(),
+        }
+        if len(self.cache) > 100:
+            stale = next(iter(self.cache))
+            self.cache.pop(stale)
+            self.feed_meta.pop(stale, None)
+        return self.cache[key][1]
+
+    async def employer_search(self, db, body, p):
+        enabled = list(db.scalars(select(Feed).where(Feed.enabled.is_(True))))
+        filtered = {
+            k: 0
+            for k in [
+                "different_country",
+                "unknown_country",
+                "region",
+                "title",
+                "outside_domain",
+                "seniority",
+                "internship",
+                "excluded",
+                "employment_type",
+                "salary",
+                "untrusted_url",
+                "freshness_competition",
+            ]
+        }
+        checked = []
+        rows = []
+        errors = []
+        semaphore = asyncio.Semaphore(5)
+        screening_rejections = {}
+        terms = family_terms(body.title)
+
+        async def fetch(feed):
+            async with semaphore:
+                query = body.title if body.scope == "exact" else ""
+                try:
+                    cached_key = (feed.provider, feed.slug, query, body.country)
+                    was_cached = (
+                        cached_key in self.cache
+                        and time.monotonic() - self.cache[cached_key][0] < 300
+                    )
+                    result = await self.feed(
+                        feed.provider, feed.slug, feed.employer, query, body.country
+                    )
+                    meta = getattr(self, "feed_meta", {}).get(
+                        (feed.provider, feed.slug, query, body.country), {}
+                    )
+                    return (
+                        result,
+                        {
+                            "employer": feed.employer,
+                            "status": "checked",
+                            "cached": was_cached,
+                            "returned": len(result),
+                            **meta,
+                        },
+                        None,
+                    )
+                except ValueError as error:
+                    return (
+                        [],
+                        {"employer": feed.employer, "status": "failed", "returned": 0},
+                        feed.employer + ": " + str(error),
+                    )
+
+        tasks = {asyncio.create_task(fetch(f)): f for f in enabled}
+        if tasks:
+            done, pending = await asyncio.wait(tasks, timeout=48)
+            for task in done:
+                try:
+                    found, info, error = task.result()
+                    rows += found
+                    checked.append(info)
+                    if error:
+                        errors.append(error)
+                except Exception:
+                    checked.append(
+                        {"employer": tasks[task].employer, "status": "failed", "returned": 0}
+                    )
+                    errors.append(tasks[task].employer + ": source could not be processed.")
+            for task in pending:
+                checked.append(
+                    {"employer": tasks[task].employer, "status": "time limit", "returned": 0}
+                )
+                task.cancel()
+            if pending:
+                await asyncio.gather(*pending, return_exceptions=True)
+                errors.append(
+                    "Some employer boards reached the search time limit. Partial results are retained; retry uses recent successful source caches."
+                )
+        else:
+            errors.append(
+                "No enabled verified employer feeds. Check employer career pages to discover supported feeds, or add a published board in Job sources."
+            )
+        output = []
+        for job in unique(rows):
+            if (
+                is_indeed(job.get("url", ""))
+                or not safe_url(job.get("url", ""))
+                or any(
+                    (urlsplit(job["url"]).hostname or "") == h
+                    or (urlsplit(job["url"]).hostname or "").endswith("." + h)
+                    for h in BLOCKED
+                )
+            ):
+                filtered["untrusted_url"] += 1
+                continue
+            screening = discovery_screen(job, p)
+            if not screening["allowed"]:
+                screening_rejections[screening["reason"]] = (
+                    screening_rejections.get(screening["reason"], 0) + 1
+                )
+                filtered["freshness_competition"] += 1
+                continue
+            job = {**job, "discovery_screen": screening}
+            country, evidence = country_for(job.get("location", ""), job.get("country", ""))
+            evidence = job.get("country_evidence") or evidence
+            job = {**job, "country": country, "country_evidence": evidence}
+            if country and country != body.country:
+                filtered["different_country"] += 1
+                continue
+            if not country and not body.include_unknown_country:
+                filtered["unknown_country"] += 1
+                continue
+            if (
+                body.region
+                and body.region_mode == "only"
+                and not has(job.get("location", ""), body.region)
+            ):
+                filtered["region"] += 1
+                continue
+            title = job["title"]
+            description = job.get("description", "")
+            if body.scope == "exact" and body.title.casefold() not in title.casefold():
+                filtered["title"] += 1
+                continue
+            if (
+                body.scope == "related"
+                and terms
+                and not any(has(title + " " + description, t) for t in terms)
+            ):
+                filtered["title"] += 1
+                continue
+            civil_relevant = domain(title, description[:1500])
+            analytics_relevant = analytics_domain(title, description[:1500])
+            if not (
+                civil_relevant
+                if body.track == "civil"
+                else analytics_relevant
+                if body.track == "analytics"
+                else civil_relevant or analytics_relevant
+            ):
+                filtered["outside_domain"] += 1
+                continue
+            if p["early_career_only"] and not body.include_stretch and SENIOR.search(title):
+                filtered["seniority"] += 1
+                continue
+            if (
+                p["earliest_start"] >= "2027-01-01"
+                and not next(
+                    (
+                        c.get("allow_internships", False)
+                        for c in p["countries"]
+                        if c["country"] == body.country
+                    ),
+                    False,
+                )
+                and re.search(r"\b(intern(?:ship)?|co-op|coop)\b", title, re.I)
+            ):
+                filtered["internship"] += 1
+                continue
+            if (
+                re.search(r"\b" + DENIED_ORG + r"\b", json.dumps(job), re.I)
+                or any(x.casefold() in job["employer"].casefold() for x in p["excluded_employers"])
+                or any(contains_term(title, x) for x in p["excluded_terms"])
+            ):
+                filtered["excluded"] += 1
+                continue
+            if (
+                p["employment_type"] == "Full-time"
+                and not (
+                    next(
+                        (
+                            c.get("allow_internships", False)
+                            for c in p["countries"]
+                            if c["country"] == body.country
+                        ),
+                        False,
+                    )
+                    and re.search(r"intern|co.op", title + job.get("employment_type", ""), re.I)
+                )
+                and re.search("part.time|contract|intern", job.get("employment_type", ""), re.I)
+            ):
+                filtered["employment_type"] += 1
+                continue
+            assessment = fit(db, job)
+            if not country:
+                assessment["warnings"].append(
+                    "Country could not be established from published location fields. Confirm geography before applying."
+                )
+            if not job.get("description_complete", True):
+                assessment["warnings"].append(
+                    "Listing summary only. Read and save the full employer description before deciding eligibility or drafting."
+                )
+            country_pref = next((c for c in p["countries"] if c["country"] == body.country), {})
+            lower_exception = country_pref.get("allow_lower_for_early_career", False) and bool(
+                re.search(
+                    r"junior|graduate|entry.level|intern|co.op|trainee|early.career", title, re.I
+                )
+            )
+            if (
+                lower_exception
+                and assessment["salary_comparison"]["minimum_status"] == "Below country minimum."
+            ):
+                assessment["warnings"].append(
+                    "Below your preferred pay floor; retained under your early-career/internship exception. Progression or conversion is not established."
+                )
+            if (
+                not lower_exception
+                and assessment["salary_comparison"]["minimum_status"] == "Below country minimum."
+            ):
+                filtered["salary"] += 1
+                continue
+            rank, label = region_rank(
+                job.get("location", ""), country, body.region, p.get("location_priorities")
+            )
+            output.append(
+                {
+                    **job,
+                    **assessment,
+                    "fit": assessment,
+                    "location_rank": rank,
+                    "location_note": label,
+                    "career_track": "civil/infrastructure"
+                    if civil_relevant
+                    else "adjacent business/operations analytics",
+                    "foreign_applicant_evidence": "Not established: review the original posting and your permit conditions.",
+                }
+            )
+        output.sort(
+            key=lambda j: (j["location_rank"], -j["score"], j["title"].casefold(), j["url"])
+        )
+        total = len(output)
+        end = body.offset + body.limit
+        from .catalog import view_catalog
+
+        catalog = view_catalog(db, p)["employers"]
+        targets = [c for c in catalog if body.country in c["countries"]]
+        if body.region:
+            targets.sort(
+                key=lambda c: (
+                    0 if any(has(r, body.region) for r in c["regions"]) else 1,
+                    c["priority"],
+                    c["name"],
+                )
+            )
+        return {
+            "jobs": output[body.offset : end],
+            "total": total,
+            "offset": body.offset,
+            "limit": body.limit,
+            "has_more": end < total,
+            "next_offset": end if end < total else None,
+            "errors": errors,
+            "coverage": f"{len(checked)} enabled employer board(s) attempted; public employer-source results only. Up to 10 pages for SmartRecruiters/Lever, 400 public Workday search results and 5,000 rows for whole-board APIs. Career-page targets below are separate from live vacancies.",
+            "links": links(body.title, body.country, body.region),
+            "checked_at": time.time(),
+            "cached": any(c.get("cached", False) for c in checked),
+            "source_checks": sorted(checked, key=lambda x: x["employer"]),
+            "filtered": filtered,
+            "screening_rejections": screening_rejections,
+            "retrieved": len(rows),
+            "deduplicated": len(unique(rows)),
+            "employer_targets": targets,
+            "target_count": len(targets),
+            "search_scope": body.scope,
+        }
 
     async def search(self, db, body):
         p = prefs(db)
@@ -305,53 +681,16 @@ class Providers:
         coverage = ""
         cfg = settings()
         if body.source == "feeds":
-            enabled = list(db.scalars(select(Feed).where(Feed.enabled.is_(True))))
-            if not enabled:
-                errors.append(
-                    "No enabled verified employer feeds. Add and verify a board in Job sources."
-                )
-            for feed in enabled[:20]:
-                try:
-                    rows = await self.feed(
-                        feed.provider, feed.slug, feed.employer, body.title, body.country
-                    )
-                    aliases = [
-                        body.country.lower(),
-                        *(
-                            [CODES.get(body.country, "")]
-                            if feed.provider == "smartrecruiters"
-                            else []
-                        ),
-                        *(
-                            {
-                                "UAE": ["united arab emirates"],
-                                "USA": ["united states"],
-                                "United Kingdom": ["united kingdom"],
-                            }.get(body.country, [])
-                        ),
-                    ]
-                    terms = [
-                        t
-                        for t in re.findall("[a-z]{3,}", body.title.lower())
-                        if t not in {"junior", "graduate", "engineer"}
-                    ]
-                    for j in rows:
-                        if j.get("country") and j["country"] != body.country:
-                            continue
-                        if not any(
-                            re.search(r"\b" + re.escape(a) + r"\b", j["location"], re.I)
-                            for a in aliases
-                            if a
-                        ):
-                            continue
-                        if body.region and body.region.lower() not in j["location"].lower():
-                            continue
-                        if terms and not any(t in j["title"].lower() for t in terms):
-                            continue
-                        jobs.append({**j, "country": body.country})
-                except ValueError as e:
-                    errors.append(feed.employer + ": " + str(e))
-            coverage = "Verified employer boards only. SmartRecruiters: first 100 per title/country query. Other boards: first 1,000. Listings may omit full requirements; check the original."
+            return await self.employer_search(db, body, p)
+        if body.source in {"remotive", "adzuna"}:
+            return {
+                "jobs": [],
+                "errors": [
+                    "Aggregator sources are disabled for this direct-employer search. Use employer career pages, verified employer feeds or the official government source."
+                ],
+                "coverage": "Direct employers and government sources only.",
+                "links": links(body.title, body.country, body.region),
+            }
         else:
             try:
                 async with httpx.AsyncClient(
@@ -373,11 +712,7 @@ class Providers:
                             loc = str(r.get("candidate_required_location", ""))
                             aliases = [
                                 body.country,
-                                *(
-                                    [CODES.get(body.country, "")]
-                                    if feed.provider == "smartrecruiters"
-                                    else []
-                                ),
+                                CODES.get(body.country, ""),
                                 {"UAE": "United Arab Emirates", "USA": "United States"}.get(
                                     body.country, ""
                                 ),
@@ -560,6 +895,8 @@ def contains_term(text, term):
 
 
 async def capture(url, permitted, transport=None):
+    if is_indeed(url):
+        raise ValueError("Indeed sources are excluded. Use the original employer posting.")
     if not permitted or not safe_url(url) or urlsplit(url).scheme != "https":
         raise ValueError(
             "Confirm the employer permits a one-time public read, or paste the text instead. Use HTTPS without credentials."
@@ -569,6 +906,10 @@ async def capture(url, permitted, transport=None):
         raise ValueError("Only standard public HTTPS URLs are supported.")
     if any(parsed.hostname == h or parsed.hostname.endswith("." + h) for h in BLOCKED):
         raise ValueError("This site is browser-only. Open it yourself and paste the job text.")
+    from .workday import capture_posting, public_board
+
+    if public_board(url) and "/job/" in parsed.path:
+        return await capture_posting(url, transport)
     match = re.fullmatch(r"/([A-Za-z0-9_-]{1,160})/([0-9]{6,30})(?:-[^/]*)?/?", parsed.path)
     async with httpx.AsyncClient(timeout=15, follow_redirects=False, transport=transport) as client:
         if parsed.hostname == "jobs.smartrecruiters.com" and match:
@@ -725,6 +1066,9 @@ async def capture(url, permitted, transport=None):
                 "source": "Owner-requested one-time capture",
                 "salary": "Review source-stated salary in original text",
                 "closing_date": str(posting.get("validThrough", ""))[:80],
+                "published_at": str(posting.get("datePosted", "")),
+                "published_at_kind": "posted" if posting.get("datePosted") else "unknown",
+                "published_at_evidence": "Employer JobPosting.datePosted field",
             }
         return {
             "title": "".join(parser.title)[:240],

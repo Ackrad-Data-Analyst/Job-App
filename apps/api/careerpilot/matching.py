@@ -4,7 +4,8 @@ from urllib.parse import urlencode
 from sqlalchemy import select
 
 from .models import FACTS, Candidate, Preferences
-from .schemas import DENIED_ORG
+from .schemas import DENIED_ORG, PreferencesInput
+from .taxonomy import FAMILIES
 
 BANNED = re.compile(
     r"\b(gpa|cgpa|mca|master\s+of\s+computer\s+applications|immigration|visa|relocat\w*|work authori[sz]\w*|authori[sz]ed to work|citizenship|permanent residen\w*|spearheaded|leveraged|proven track record|passionate|dynamic|results.driven|expert|eit|p\.?eng\.?|p\.?e\.?|fe exam candidate|primavera|revit|"
@@ -12,79 +13,7 @@ BANNED = re.compile(
     + r")\b|\u2014",
     re.I,
 )
-FAMILIES = [
-    (
-        "Construction and site",
-        ["civil", "construction", "site", "quantity"],
-        [
-            "Graduate Civil Engineer",
-            "Junior Civil Engineer",
-            "EIT Civil",
-            "Site Engineer (Civil)",
-            "Field Engineer",
-            "Project Engineer (junior)",
-            "QA/QC Engineer (Civil)",
-            "Technical Engineer",
-        ],
-    ),
-    (
-        "Cost and quantity surveying",
-        ["quantity", "planswift", "cost", "tender"],
-        [
-            "Quantity Surveyor",
-            "Assistant/Junior Quantity Surveyor",
-            "Cost Estimator",
-            "Estimating Engineer",
-            "Cost Engineer",
-        ],
-    ),
-    (
-        "Project controls and planning",
-        ["ms project", "scheduling", "progress", "excel"],
-        ["Project Controls Analyst", "Planning Engineer (junior)", "Scheduler (junior)"],
-    ),
-    (
-        "GIS and geospatial",
-        ["qgis", "arcgis", "arcpy", "gis"],
-        ["GIS Analyst", "GIS Technician", "Geospatial Analyst"],
-    ),
-    (
-        "Water resources and stormwater",
-        ["hec-ras", "hydrology", "drainage", "stormwater"],
-        [
-            "Water Resources EIT",
-            "Stormwater/Drainage Engineer (graduate)",
-            "Hydrology/Hydraulic Modeller (junior)",
-        ],
-    ),
-    (
-        "Transportation",
-        ["road", "pavement", "transportation", "python"],
-        ["Transportation Engineer (graduate)", "Transportation Data Analyst"],
-    ),
-    ("Environmental", ["environmental", "water", "civil"], ["Environmental Engineer (graduate)"]),
-    (
-        "Renewable energy",
-        ["solar", "renewable", "gis", "hydrology"],
-        ["Renewable Energy Civil Engineer (graduate)", "Solar/Wind Development Analyst"],
-    ),
-    (
-        "Mining",
-        ["geotechnical", "civil", "surveying"],
-        ["Mining Engineer-in-Training (civil/geotechnical/tailings support)"],
-    ),
-    ("Surveying", ["gps", "total station", "surveying"], ["Survey Technician"]),
-    (
-        "Asset management",
-        ["condition", "maintenance", "infrastructure", "analytics"],
-        ["Asset Management Analyst"],
-    ),
-    (
-        "Infrastructure data analytics",
-        ["python", "sql", "analytics", "civil"],
-        ["Infrastructure Data Analyst", "Construction Data Analyst"],
-    ),
-]
+
 SKILLS = [
     "QGIS",
     "ArcGIS Pro",
@@ -120,7 +49,7 @@ SKILLS = [
 ]
 SENIOR = re.compile(r"\b(senior|sr\.?|principal|director|chief|lead|head|manager)\b", re.I)
 COUNTRIES = [
-    ("Canada", "Saskatchewan (Regina first), Alberta, Other provinces", "CAD"),
+    ("Canada", "Regina, Saskatchewan, Alberta, Ontario, then other provinces", "CAD"),
     ("UAE", "Dubai, Abu Dhabi", "AED"),
     ("USA", "", "USD"),
     ("Australia", "", "AUD"),
@@ -163,7 +92,7 @@ def defaults():
 
 
 def prefs(db):
-    return db.scalar(select(Preferences)).data
+    return PreferencesInput.model_validate(db.scalar(select(Preferences)).data).model_dump()
 
 
 def contains(text, term):
@@ -257,10 +186,46 @@ def domain(title, description=""):
             "project control",
             "planning engineer",
             "drainage",
+            "bridge",
+            "dam ",
+            "marine",
+            "coastal",
+            "port infrastructure",
+            "rail",
+            "transit",
+            "airport",
+            "geomatics",
+            "hydrogeolog",
+            "tailings",
+            "materials technician",
+            "municipal",
+            "urban planner",
+            "planning technician",
+            "land development",
+            "project coordinator",
+            "field coordinator",
+            "capital projects",
+            "cost control",
             "hydrolog",
             "asset management",
         ]
     ) or any(x in title.lower() for x in ["field engineer", "technical engineer", "scheduler"])
+
+
+def analytics_domain(title, description=""):
+    if re.search(
+        r"\b(nurse|nursing|physician|surgeon|dentist|therapist|software engineer|financial analyst|finance analyst|payroll|accounting)\b",
+        title,
+        re.I,
+    ):
+        return False
+    return bool(
+        re.search(
+            r"data analyst|business analyst|operations analyst|analytics|business intelligence|operations research|performance analyst|process improvement|supply chain analyst",
+            title,
+            re.I,
+        )
+    )
 
 
 def clauses(description):
@@ -318,11 +283,38 @@ def salary_comparison(job, p, c):
         )
     minimum = c.get("min_salary")
     if minimum is not None:
-        result["minimum_status"] = "Currency/annual period not comparable."
-        if native and job.get("salary_period") == "year":
-            if hi is not None and hi * native < minimum:
+        target_period = c.get("min_salary_period", "year")
+        source_period = job.get("salary_period", "")
+        factor = (
+            1
+            if target_period == source_period
+            else (
+                1 / 12
+                if source_period == "year" and target_period == "month"
+                else 12
+                if source_period == "month" and target_period == "year"
+                else None
+            )
+        )
+        result["minimum_status"] = "Currency/pay period not comparable."
+        result["country_minimum"] = {
+            "value": minimum,
+            "currency": c.get("currency", ""),
+            "period": target_period,
+        }
+        if native and factor:
+            low = lo * native * factor if lo is not None else None
+            high = hi * native * factor if hi is not None else None
+            result["country_comparison"] = {
+                "min": round(low, 2) if low is not None else None,
+                "max": round(high, 2) if high is not None else None,
+                "currency": c.get("currency", ""),
+                "period": target_period,
+                "method": "Monthly/yearly rates compared with 12 calendar months only; hours, bonuses and take-home pay are not inferred.",
+            }
+            if high is not None and high < minimum:
                 result["minimum_status"] = "Below country minimum."
-            elif lo is not None and lo * native >= minimum:
+            elif low is not None and low >= minimum:
                 result["minimum_status"] = "Published lower bound meets minimum; verify offer."
             elif hi is None:
                 result["minimum_status"] = "Upper bound unknown; cannot assess minimum."
@@ -334,6 +326,11 @@ def salary_comparison(job, p, c):
 def fit(db, job):
     text = confirmed_text(db)
     learning = " ".join(fact_text(f) for f in facts(db, True) if f.learning)
+    supporting = " ".join(
+        fact_text(f)
+        for f in db.scalars(select(FACTS["skills"]))
+        if usable(f) and re.search(r"supporting use|under supervision", f.details, re.I)
+    )
     req, prefer = clauses(job.get("description", ""))
     p = prefs(db)
     country = next((c for c in p["countries"] if c["country"] == job.get("country")), {})
@@ -342,7 +339,8 @@ def fit(db, job):
     def split(value):
         terms = [s for s in SKILLS if contains(value, s)]
         return {
-            "confirmed": [s for s in terms if contains(text, s)],
+            "confirmed": [s for s in terms if contains(text, s) and not contains(supporting, s)],
+            "supporting": [s for s in terms if contains(text, s) and contains(supporting, s)],
             "learning": [s for s in terms if not contains(text, s) and contains(learning, s)],
             "missing": [s for s in terms if not contains(text, s) and not contains(learning, s)],
         }
@@ -389,6 +387,23 @@ def fit(db, job):
     ]:
         if re.search(pattern, req, re.I) and not (proof and re.search(proof, text, re.I)):
             blockers.append(label)
+    california = any(
+        f.status == "confirmed"
+        and f.allowed_on_resume
+        and "california" in fact_text(f).lower()
+        and re.search(r"driver.?s licen[cs]e|driving licen[cs]e", fact_text(f), re.I)
+        for f in facts(db)
+    )
+    if california and any("Full driving licence" in b for b in blockers):
+        blockers = [b for b in blockers if "Full driving licence" not in b]
+        if job.get("country") == "USA":
+            warnings.append(
+                "California driver's licence is recorded. Confirm the required class and state recognition for this posting."
+            )
+        else:
+            blockers.append(
+                "California driver's licence recorded; required local licence/class and recognition are not confirmed."
+            )
     senior = bool(SENIOR.search(job["title"])) or any(
         int(n) > 3 for n in re.findall(r"\b(\d{1,2})\s*\+?\s*(?:years|yrs)\b", req, re.I)
     )
@@ -404,11 +419,68 @@ def fit(db, job):
         warnings.append("Work authorisation: " + auth + ". Do not claim current authorisation.")
     if any(x.lower() in job.get("employer", "").lower() for x in p["excluded_employers"]):
         blockers.append("Excluded employer in your settings.")
-    if p["earliest_start"] >= "2027-01-01" and re.search(
-        r"\b(intern(?:ship)?|co-op|coop)\b", job["title"], re.I
+    if (
+        p["earliest_start"] >= "2027-01-01"
+        and not country.get("allow_internships", False)
+        and re.search(r"\b(intern(?:ship)?|co-op|coop)\b", job["title"], re.I)
     ):
         blockers.append("Intern/co-op is outside the January 2027 career target.")
-    relevant = domain(job["title"], job.get("description", "")[:1000])
+    opt_alignment = None
+    availability = country.get("work_start_not_before") or p.get("earliest_start", "")
+    if availability:
+        warnings.append(
+            "Recorded availability is not before "
+            + availability
+            + "; confirm the posting's actual start date."
+        )
+        explicit_start = re.search(
+            r"(?:start date|starting|commencement)\s*[:=-]?\s*(\d{4}-\d{2}-\d{2})",
+            job.get("description", ""),
+            re.I,
+        )
+        if explicit_start and explicit_start[1] < availability:
+            blockers.append("Published start date is earlier than your recorded availability.")
+    if job.get("country") == "USA" and "opt" in country.get("authorization_route", "").casefold():
+        terms = [
+            t
+            for t in [
+                "analytics",
+                "data analysis",
+                "data analyst",
+                "business analyst",
+                "sql",
+                "python",
+                "forecast",
+                "optimisation",
+                "optimization",
+                "dashboard",
+                "business intelligence",
+                "operations research",
+            ]
+            if contains(job["title"] + " " + job.get("description", ""), t)
+        ]
+        opt_alignment = {
+            "status": "potentially related" if terms else "needs duties review",
+            "evidence_terms": terms,
+            "explanation": "OPT employment must relate to the Business Analytics programme supporting OPT. A prior civil-engineering degree alone does not establish that relationship. Work starts only within the actual authorised EAD dates; no approval or extension is inferred from an application.",
+            "reference": "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students",
+        }
+        warnings.append(
+            "OPT degree relationship: "
+            + opt_alignment["status"]
+            + ". Check actual duties and the authorised dates with the designated school official."
+        )
+    if job.get("country") == "Canada" and re.search(
+        r"hospital|healthcare|health care|health services",
+        job["title"] + " " + job.get("employer", "") + " " + job.get("description", ""),
+        re.I,
+    ):
+        warnings.append(
+            "Hospital employment is not blanket-excluded. Check the actual occupation and duties against the exact health-service restriction on your permit; non-clinical analytics is assessed separately from nursing or patient care."
+        )
+    relevant = domain(job["title"], job.get("description", "")[:1000]) or analytics_domain(
+        job["title"]
+    )
     evidence = sorted(
         {
             w
@@ -423,7 +495,11 @@ def fit(db, job):
         round(
             (25 if relevant and text else 0)
             + min(20, len(evidence) * 4)
-            + (45 * len(required["confirmed"]) / count if count else 0)
+            + (
+                45 * (len(required["confirmed"]) + 0.5 * len(required["supporting"])) / count
+                if count
+                else 0
+            )
             + (10 if text and not senior else 0)
         ),
     )
@@ -433,8 +509,13 @@ def fit(db, job):
         "Skip"
         if blockers or not relevant
         else "Apply"
-        if score >= 65 and not senior and not required["missing"] and not required["learning"]
-        else "Consider"
+        if score >= 65
+        and not senior
+        and not required["missing"]
+        and not required["learning"]
+        and not required["supporting"]
+        and not (opt_alignment and opt_alignment["status"] == "needs duties review")
+        else "Stretch"
     )
     if not count:
         warnings.append(
@@ -449,6 +530,9 @@ def fit(db, job):
         "warnings": warnings,
         "evidence_terms": evidence,
         "authorization": auth,
+        "authorization_route": country.get("authorization_route", ""),
+        "work_start_not_before": availability,
+        "opt_alignment": opt_alignment,
         "authorization_note": country.get("authorization_note", ""),
         "salary_comparison": salary_comparison(job, p, country),
         "method": "Local keyword rubric from confirmed resume-allowed facts. Learning never counts as has. This does not establish eligibility.",
@@ -458,32 +542,25 @@ def fit(db, job):
 def links(title, country, region=""):
     where = ", ".join(x for x in [region, country] if x)
     sites = {
-        "Canada": [("Job Bank", "jobbank.gc.ca")],
-        "UAE": [
-            ("Bayt", "bayt.com"),
-            ("GulfTalent", "gulftalent.com"),
-            ("Naukrigulf", "naukrigulf.com"),
+        "Canada": [
+            (
+                "Canada Job Bank (government)",
+                "https://www.jobbank.gc.ca/jobsearch/jobsearch?"
+                + urlencode({"searchstring": title, "locationstring": where}),
+            )
         ],
-        "Australia": [("Seek", "seek.com.au")],
-        "New Zealand": [("Seek NZ", "seek.co.nz")],
-        "United Kingdom": [("Reed", "reed.co.uk")],
-        "Qatar": [("GulfTalent", "gulftalent.com")],
+        "USA": [
+            (
+                "USAJOBS (government)",
+                "https://www.usajobs.gov/Search/Results?" + urlencode({"k": title, "l": where}),
+            )
+        ],
+        "UAE": [("Dubai government jobs", "https://dubaicareers.ae/")],
     }
     return [
         {
-            "name": "LinkedIn",
+            "name": "LinkedIn (optional browser search)",
             "url": "https://www.linkedin.com/jobs/search/?"
-            + urlencode({"keywords": title, "location": where, "f_JT": "F"}),
+            + urlencode({"keywords": title, "location": where, "f_JT": "F", "f_TPR": "r432000"}),
         }
-    ] + [
-        {
-            "name": name,
-            "url": "https://www.google.com/search?"
-            + urlencode({"q": f'site:{host} "{title}" {where}'}),
-        }
-        for name, host in [
-            ("Indeed", "indeed.com"),
-            *sites.get(country, []),
-            ("Employer sites", "careers"),
-        ]
-    ]
+    ] + [{"name": name, "url": url} for name, url in sites.get(country, [])]

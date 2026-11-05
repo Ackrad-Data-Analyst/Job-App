@@ -355,7 +355,26 @@ def compose(db, job, kind, country, contact_index=None):
             lines.append(title)
             for f in records:
                 add(
-                    [piece(f, "title"), piece(f, "organization")],
+                    [piece(f, "title"), piece(f, "organization")]
+                    + (
+                        [
+                            piece(
+                                f,
+                                "details",
+                                next(
+                                    (
+                                        v.strip()
+                                        for v in f.details.splitlines()
+                                        if re.search(r"supporting use|under supervision", v, re.I)
+                                    ),
+                                    "",
+                                ),
+                            )
+                        ]
+                        if category == "skills"
+                        and re.search(r"supporting use|under supervision", f.details, re.I)
+                        else []
+                    ),
                     separator=" | ",
                     suffix=" (currently learning)"
                     if f.learning and "currently learning" not in f.title.lower()

@@ -8,9 +8,9 @@ import pytest
 from careerpilot.config import database
 from careerpilot.initialize import initialize
 from careerpilot.main import app
-from careerpilot.models import Base
+from careerpilot.models import Base, Preferences
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, select
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
@@ -34,6 +34,9 @@ def db(tmp_path, monkeypatch):
     Base.metadata.create_all(engine)
     with Session(engine) as session:
         initialize(session)
+        pref = session.scalar(select(Preferences))
+        pref.data = {**pref.data, "include_unknown_posted_date": True}
+        session.commit()
         yield session
     engine.dispose()
 

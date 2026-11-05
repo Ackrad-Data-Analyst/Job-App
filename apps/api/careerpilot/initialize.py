@@ -71,6 +71,20 @@ def initialize(db, starters=False):
                         verified_at=datetime.fromisoformat("2026-10-16T01:34:00+00:00"),
                     )
                 )
+    # Expand search coverage once; never change career facts or authorisation claims.
+    pref = db.scalar(select(Preferences))
+    if pref and not pref.data.get("search_catalog_version"):
+        from .schemas import PreferencesInput
+        from .taxonomy import ALL_TITLES
+
+        value = dict(pref.data)
+        value["target_titles"] = list(
+            dict.fromkeys([*value.get("target_titles", []), *ALL_TITLES])
+        )[:250]
+        value.setdefault("home_base", "Regina, Saskatchewan")
+        value.setdefault("location_priorities", ["Regina", "Saskatchewan", "Alberta", "Ontario"])
+        value["search_catalog_version"] = 1
+        pref.data = PreferencesInput.model_validate(value).model_dump()
     db.commit()
 
 
