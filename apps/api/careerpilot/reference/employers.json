@@ -1,0 +1,2806 @@
+[
+  {
+    "key": "clifton-engineering-group",
+    "name": "Clifton Engineering Group",
+    "website": "https://www.clifton.ca",
+    "careers_url": "https://www.clifton.ca/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatoon",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Civil",
+      "Geotechnical",
+      "Materials",
+      "Transportation"
+    ],
+    "priority": 1,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "city-of-regina",
+    "name": "City of Regina",
+    "website": "https://www.regina.ca",
+    "careers_url": "https://jobs.regina.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Municipal",
+      "Water",
+      "Transportation",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 1,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "saskpower",
+    "name": "SaskPower",
+    "website": "https://www.saskpower.com",
+    "careers_url": "https://www.saskpower.com/Careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 1,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "saskenergy",
+    "name": "SaskEnergy",
+    "website": "https://www.saskenergy.com",
+    "careers_url": "https://www.saskenergy.com/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 1,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "water-security-agency",
+    "name": "Water Security Agency",
+    "website": "https://www.wsask.ca",
+    "careers_url": "https://www.wsask.ca/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Moose Jaw",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Water",
+      "Dams",
+      "Environmental",
+      "GIS"
+    ],
+    "priority": 1,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "government-of-saskatchewan",
+    "name": "Government of Saskatchewan",
+    "website": "https://www.saskatchewan.ca",
+    "careers_url": "https://www.saskatchewan.ca/government/government-structure/crown-corporations/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Transportation",
+      "Municipal",
+      "Water",
+      "Environmental",
+      "GIS"
+    ],
+    "priority": 1,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "brandt",
+    "name": "Brandt",
+    "website": "https://www.brandt.ca",
+    "careers_url": "https://www.brandt.ca/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating",
+      "Analytics"
+    ],
+    "priority": 1,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "saskwater",
+    "name": "SaskWater",
+    "website": "https://www.saskwater.com",
+    "careers_url": "https://www.saskwater.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Moose Jaw",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Water",
+      "Civil",
+      "Asset management"
+    ],
+    "priority": 1,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "kgs-group",
+    "name": "KGS Group",
+    "website": "https://www.kgsgroup.com",
+    "careers_url": "https://www.kgsgroup.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Dams",
+      "Geotechnical"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "associated-engineering",
+    "name": "Associated Engineering",
+    "website": "https://www.ae.ca",
+    "careers_url": "https://www.ae.ca/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Transportation",
+      "Asset management"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "graham-construction",
+    "name": "Graham Construction",
+    "website": "https://www.grahambuilds.com",
+    "careers_url": "https://www.grahambuilds.com/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating",
+      "Project controls"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "pcl-construction",
+    "name": "PCL Construction",
+    "website": "https://www.pcl.com",
+    "careers_url": "https://careers.pcl.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating",
+      "Project controls"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "bird-construction",
+    "name": "Bird Construction",
+    "website": "https://www.bird.ca",
+    "careers_url": "https://www.bird.ca/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating",
+      "Project controls"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "geoverra",
+    "name": "GeoVerra",
+    "website": "https://www.geoverra.com",
+    "careers_url": "https://www.geoverra.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Surveying",
+      "GIS",
+      "Construction"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "city-of-saskatoon",
+    "name": "City of Saskatoon",
+    "website": "https://www.saskatoon.ca",
+    "careers_url": "https://careers.saskatoon.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Saskatoon",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Municipal",
+      "Water",
+      "Transportation",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "cameco",
+    "name": "Cameco",
+    "website": "https://www.cameco.com",
+    "careers_url": "https://www.cameco.com/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Saskatoon",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental",
+      "Project controls"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "nutrien",
+    "name": "Nutrien",
+    "website": "https://www.nutrien.com",
+    "careers_url": "https://jobs.nutrien.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Saskatoon",
+      "Saskatchewan",
+      "Alberta"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental",
+      "Asset management"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "mosaic",
+    "name": "Mosaic",
+    "website": "https://www.mosaicco.com",
+    "careers_url": "https://www.mosaicco.com/careers",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental",
+      "Project controls"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "bhp",
+    "name": "BHP",
+    "website": "https://www.bhp.com",
+    "careers_url": "https://careers.bhp.com/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Geotechnical",
+      "Project controls"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "saskatchewan-research-council",
+    "name": "Saskatchewan Research Council",
+    "website": "https://www.src.sk.ca",
+    "careers_url": "https://www.src.sk.ca/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Saskatoon",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Mining",
+      "Environmental",
+      "GIS",
+      "Analytics"
+    ],
+    "priority": 2,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "englobe",
+    "name": "Englobe",
+    "website": "https://www.englobecorp.com",
+    "careers_url": "https://www.englobecorp.com/en-ca/careers/early-career/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Geotechnical",
+      "Environmental",
+      "Materials"
+    ],
+    "priority": 2,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "wsp",
+    "name": "WSP",
+    "website": "https://www.wsp.com",
+    "careers_url": "https://www.wsp.com/en-ca/careers/job-opportunities",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Mining",
+      "GIS"
+    ],
+    "priority": 2,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "stantec",
+    "name": "Stantec",
+    "website": "https://www.stantec.com",
+    "careers_url": "https://stantec.jobs/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "GIS",
+      "Energy"
+    ],
+    "priority": 2,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "aecom",
+    "name": "AECOM",
+    "website": "https://aecom.com",
+    "careers_url": "https://aecom.com/careers/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Marine",
+      "Environmental"
+    ],
+    "priority": 2,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "dillon-consulting",
+    "name": "Dillon Consulting",
+    "website": "https://www.dillon.ca",
+    "careers_url": "https://www.dillon.ca/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Environmental",
+      "Transportation",
+      "GIS"
+    ],
+    "priority": 2,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "tetra-tech",
+    "name": "Tetra Tech",
+    "website": "https://www.tetratech.com",
+    "careers_url": "https://www.tetratech.com/careers/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Environmental",
+      "Geotechnical",
+      "Mining",
+      "GIS"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "exp",
+    "name": "EXP",
+    "website": "https://www.exp.com",
+    "careers_url": "https://www.exp.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Geotechnical",
+      "Materials",
+      "Transportation"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "isl-engineering",
+    "name": "ISL Engineering",
+    "website": "https://islengineering.com",
+    "careers_url": "https://islengineering.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Civil",
+      "Municipal",
+      "Transportation",
+      "Water"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "cima",
+    "name": "CIMA+",
+    "website": "https://www.cima.ca",
+    "careers_url": "https://www.cima.ca/en/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Energy",
+      "Transportation",
+      "Water",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "bba",
+    "name": "BBA",
+    "website": "https://www.bba.ca",
+    "careers_url": "https://www.bba.ca/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Energy",
+      "Civil",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "wood",
+    "name": "Wood",
+    "website": "https://www.woodplc.com",
+    "careers_url": "https://careers.woodplc.com/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "Mining",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "atkinsrealis",
+    "name": "AtkinsRealis",
+    "website": "https://www.atkinsrealis.com",
+    "careers_url": "https://careers.atkinsrealis.com/en/early-careers/canada",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Civil",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Energy",
+      "Water"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "jacobs",
+    "name": "Jacobs",
+    "website": "https://www.jacobs.com",
+    "careers_url": "https://careers.jacobs.com/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Environmental"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "hatch",
+    "name": "Hatch",
+    "website": "https://www.hatch.com",
+    "careers_url": "https://jobs.hatch.com/",
+    "countries": [
+      "Canada",
+      "USA",
+      "UAE"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Transportation",
+      "Energy",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "ghd",
+    "name": "GHD",
+    "website": "https://www.ghd.com",
+    "careers_url": "https://www.ghd.com/en/careers",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Environmental",
+      "Transportation"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "arcadis",
+    "name": "Arcadis",
+    "website": "https://www.arcadis.com",
+    "careers_url": "https://careers.arcadis.com/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Environmental",
+      "Transportation",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "egis",
+    "name": "Egis",
+    "website": "https://www.egis-group.com",
+    "careers_url": "https://www.egis-group.com/careers",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Marine"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "parsons",
+    "name": "Parsons",
+    "website": "https://www.parsons.com",
+    "careers_url": "https://jobs.parsons.com/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "mott-macdonald",
+    "name": "Mott MacDonald",
+    "website": "https://www.mottmac.com",
+    "careers_url": "https://www.mottmac.com/en/careers/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Water",
+      "Rail",
+      "Transportation",
+      "Energy",
+      "Marine"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "arup",
+    "name": "Arup",
+    "website": "https://www.arup.com",
+    "careers_url": "https://jobs.arup.com/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Marine",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "ramboll",
+    "name": "Ramboll",
+    "website": "https://www.ramboll.com",
+    "careers_url": "https://www.ramboll.com/careers",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Energy",
+      "Water",
+      "Environmental",
+      "Marine"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "turner-and-townsend",
+    "name": "Turner and Townsend",
+    "website": "https://www.turnerandtownsend.com",
+    "careers_url": "https://www.turnerandtownsend.com/careers/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Cost",
+      "Quantity surveying",
+      "Project controls",
+      "Construction"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "klohn-crippen-berger",
+    "name": "Klohn Crippen Berger",
+    "website": "https://www.klohn.com",
+    "careers_url": "https://www.klohn.com/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Geotechnical",
+      "Mining",
+      "Dams",
+      "Water"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "bgc-engineering",
+    "name": "BGC Engineering",
+    "website": "https://www.bgcengineering.ca",
+    "careers_url": "https://www.bgcengineering.ca/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Geotechnical",
+      "Mining",
+      "Water",
+      "Dams"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "srk-consulting",
+    "name": "SRK Consulting",
+    "website": "https://www.srk.com",
+    "careers_url": "https://www.srk.com/en/careers",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Geotechnical",
+      "Water",
+      "Environmental"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "knight-piesold",
+    "name": "Knight Piesold",
+    "website": "https://www.knightpiesold.com",
+    "careers_url": "https://www.knightpiesold.com/en/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Dams",
+      "Geotechnical",
+      "Water"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "slr-consulting",
+    "name": "SLR Consulting",
+    "website": "https://www.slrconsulting.com",
+    "careers_url": "https://www.slrconsulting.com/careers/",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Environmental",
+      "Water",
+      "Mining",
+      "GIS"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "montrose-environmental",
+    "name": "Montrose Environmental",
+    "website": "https://montrose-env.com",
+    "careers_url": "https://montrose-env.com/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Environmental",
+      "Water",
+      "GIS",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "waterline-resources",
+    "name": "Waterline Resources",
+    "website": "https://www.waterlineresources.com",
+    "careers_url": "https://www.waterlineresources.com/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Water",
+      "Hydrogeology",
+      "Environmental"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "geosyntec-consultants",
+    "name": "Geosyntec Consultants",
+    "website": "https://www.geosyntec.com",
+    "careers_url": "https://canada-geosyntec.icims.com/jobs/search",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Environmental",
+      "Geotechnical",
+      "Water",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "crozier-consulting-engineers",
+    "name": "Crozier Consulting Engineers",
+    "website": "https://www.cfcrozier.ca",
+    "careers_url": "https://www.cfcrozier.ca/career-opportunities/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Land development",
+      "Transportation",
+      "Water"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "r-v-anderson-associates",
+    "name": "R V Anderson Associates",
+    "website": "https://rvanderson.com",
+    "careers_url": "https://rvanderson.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Municipal",
+      "Water",
+      "Transportation"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "mcelhanney",
+    "name": "McElhanney",
+    "website": "https://www.mcelhanney.com",
+    "careers_url": "https://www.mcelhanney.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "British Columbia"
+    ],
+    "sectors": [
+      "Civil",
+      "Surveying",
+      "GIS",
+      "Transportation"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "ledcor",
+    "name": "Ledcor",
+    "website": "https://www.ledcor.com",
+    "careers_url": "https://jobs.ledcor.com/search/early-careers/jobs",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Surveying",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "ellisdon",
+    "name": "EllisDon",
+    "website": "https://www.ellisdon.com",
+    "careers_url": "https://www.ellisdon.com/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "aecon",
+    "name": "Aecon",
+    "website": "https://www.aecon.com",
+    "careers_url": "https://jobs.aecon.com/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Rail",
+      "Energy",
+      "Marine",
+      "Estimating"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "kiewit",
+    "name": "Kiewit",
+    "website": "https://www.kiewit.com",
+    "careers_url": "https://www.kiewitjobs.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Mining",
+      "Energy",
+      "Estimating"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "flatirondragados",
+    "name": "FlatironDragados",
+    "website": "https://www.fdcorp.com",
+    "careers_url": "https://www.fdcorp.com/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Bridges",
+      "Transportation",
+      "Marine",
+      "Construction"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "ausenco",
+    "name": "Ausenco",
+    "website": "https://ausenco.com",
+    "careers_url": "https://ausenco.com/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Ontario",
+      "British Columbia"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental",
+      "Project controls"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "teck",
+    "name": "Teck",
+    "website": "https://www.teck.com",
+    "careers_url": "https://jobs.teck.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Alberta",
+      "British Columbia"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Geotechnical",
+      "Environmental"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "barrick",
+    "name": "Barrick",
+    "website": "https://www.barrick.com",
+    "careers_url": "https://www.barrick.com/English/careers/default.aspx",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental",
+      "Project controls"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "agnico-eagle",
+    "name": "Agnico Eagle",
+    "website": "https://www.agnicoeagle.com",
+    "careers_url": "https://www.agnicoeagle.com/English/careers/default.aspx",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental",
+      "Geotechnical"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "kinross",
+    "name": "Kinross",
+    "website": "https://www.kinross.com",
+    "careers_url": "https://jobs.kinross.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "iamgold",
+    "name": "IAMGOLD",
+    "website": "https://www.iamgold.com",
+    "careers_url": "https://www.iamgold.com/English/careers/default.aspx",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Environmental",
+      "Project controls"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "newmont",
+    "name": "Newmont",
+    "website": "https://www.newmont.com",
+    "careers_url": "https://jobs.newmont.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Ontario",
+      "British Columbia"
+    ],
+    "sectors": [
+      "Mining",
+      "Civil",
+      "Geotechnical",
+      "Environmental"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "esri-canada",
+    "name": "Esri Canada",
+    "website": "https://esri.ca",
+    "careers_url": "https://esri.ca/en-ca/about/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario",
+      "Alberta"
+    ],
+    "sectors": [
+      "GIS",
+      "Analytics",
+      "Asset management"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "city-of-calgary",
+    "name": "City of Calgary",
+    "website": "https://www.calgary.ca",
+    "careers_url": "https://www.calgary.ca/careers.html",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Municipal",
+      "Water",
+      "Transportation",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "city-of-edmonton",
+    "name": "City of Edmonton",
+    "website": "https://www.edmonton.ca",
+    "careers_url": "https://www.edmonton.ca/city_government/jobs",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Municipal",
+      "Water",
+      "Transportation",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "epcor",
+    "name": "EPCOR",
+    "website": "https://www.epcor.com",
+    "careers_url": "https://www.epcor.com/en-ca/careers.html",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Water",
+      "Energy",
+      "Civil",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "altalink",
+    "name": "AltaLink",
+    "website": "https://www.altalink.ca",
+    "careers_url": "https://www.altalink.ca/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "atco",
+    "name": "ATCO",
+    "website": "https://www.atco.com",
+    "careers_url": "https://www.atco.com/en-ca/careers.html",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "Construction",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "government-of-alberta",
+    "name": "Government of Alberta",
+    "website": "https://www.alberta.ca",
+    "careers_url": "https://jobpostings.alberta.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Transportation",
+      "Water",
+      "Environmental",
+      "Civil",
+      "GIS"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "government-of-ontario",
+    "name": "Government of Ontario",
+    "website": "https://www.ontario.ca",
+    "careers_url": "https://www.gojobs.gov.on.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Transportation",
+      "Water",
+      "Environmental",
+      "Civil",
+      "GIS"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "metrolinx",
+    "name": "Metrolinx",
+    "website": "https://www.metrolinx.com",
+    "careers_url": "https://www.metrolinx.com/en/about-us/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Rail",
+      "Transit",
+      "Civil",
+      "Project controls",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "toronto-transit-commission",
+    "name": "Toronto Transit Commission",
+    "website": "https://www.ttc.ca",
+    "careers_url": "https://www.ttc.ca/Jobs",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Transit",
+      "Rail",
+      "Civil",
+      "Asset management",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "cn",
+    "name": "CN",
+    "website": "https://www.cn.ca",
+    "careers_url": "https://www.cn.ca/en/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Rail",
+      "Civil",
+      "Transportation",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "cpkc",
+    "name": "CPKC",
+    "website": "https://www.cpkcr.com",
+    "careers_url": "https://careers.cpkcr.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Saskatchewan",
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Rail",
+      "Civil",
+      "Transportation",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "via-rail",
+    "name": "VIA Rail",
+    "website": "https://www.viarail.ca",
+    "careers_url": "https://career.viarail.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Rail",
+      "Civil",
+      "Transportation",
+      "Analytics"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "regina-airport-authority",
+    "name": "Regina Airport Authority",
+    "website": "https://www.yqr.ca",
+    "careers_url": "https://www.yqr.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Airports",
+      "Civil",
+      "Asset management"
+    ],
+    "priority": 1,
+    "provenance": "Official employer homepage candidate; careers path not confirmed",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "calgary-airport-authority",
+    "name": "Calgary Airport Authority",
+    "website": "https://www.yyc.com",
+    "careers_url": "https://www.yyc.com/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Airports",
+      "Civil",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "greater-toronto-airports-authority",
+    "name": "Greater Toronto Airports Authority",
+    "website": "https://www.torontopearson.com",
+    "careers_url": "https://www.torontopearson.com/en/corporate/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Airports",
+      "Civil",
+      "Asset management",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "port-of-vancouver",
+    "name": "Port of Vancouver",
+    "website": "https://www.portvancouver.com",
+    "careers_url": "https://www.portvancouver.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "British Columbia"
+    ],
+    "sectors": [
+      "Marine",
+      "Civil",
+      "Environmental",
+      "Transportation"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "ontario-power-generation",
+    "name": "Ontario Power Generation",
+    "website": "https://www.opg.com",
+    "careers_url": "https://jobs.opg.com/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Energy",
+      "Dams",
+      "Civil",
+      "Water",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "hydro-one",
+    "name": "Hydro One",
+    "website": "https://www.hydroone.com",
+    "careers_url": "https://www.hydroone.com/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "brookfield-renewable",
+    "name": "Brookfield Renewable",
+    "website": "https://bep.brookfield.com",
+    "careers_url": "https://bep.brookfield.com/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Energy",
+      "Dams",
+      "Civil",
+      "GIS",
+      "Analytics"
+    ],
+    "priority": 4,
+    "provenance": "Official employer homepage candidate; careers path not confirmed",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "northland-power",
+    "name": "Northland Power",
+    "website": "https://www.northlandpower.com",
+    "careers_url": "https://www.northlandpower.com/en/careers/careers.aspx",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Project controls"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "res",
+    "name": "RES",
+    "website": "https://www.res-group.com",
+    "careers_url": "https://www.res-group.com/careers/",
+    "countries": [
+      "Canada",
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Construction"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "borea-construction",
+    "name": "Borea Construction",
+    "website": "https://boreaconstruction.com",
+    "careers_url": "https://boreaconstruction.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Energy",
+      "Construction",
+      "Civil",
+      "Estimating"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "mortenson",
+    "name": "Mortenson",
+    "website": "https://www.mortenson.com",
+    "careers_url": "https://www.mortenson.com/careers",
+    "countries": [
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "Construction",
+      "Estimating"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "burns-and-mcdonnell",
+    "name": "Burns and McDonnell",
+    "website": "https://www.burnsmcd.com",
+    "careers_url": "https://www.burnsmcd.com/careers",
+    "countries": [
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Civil",
+      "Energy",
+      "Airports",
+      "Water",
+      "Project controls"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "black-and-veatch",
+    "name": "Black and Veatch",
+    "website": "https://www.bv.com",
+    "careers_url": "https://careers.bv.com/",
+    "countries": [
+      "USA",
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Civil",
+      "Energy",
+      "Water",
+      "Project controls"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "hdr",
+    "name": "HDR",
+    "website": "https://www.hdrinc.com",
+    "careers_url": "https://www.hdrinc.com/careers",
+    "countries": [
+      "Canada",
+      "USA",
+      "UAE"
+    ],
+    "regions": [
+      "Alberta",
+      "Ontario"
+    ],
+    "sectors": [
+      "Civil",
+      "Transportation",
+      "Rail",
+      "Water",
+      "Airports"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "hntb",
+    "name": "HNTB",
+    "website": "https://www.hntb.com",
+    "careers_url": "https://www.hntb.com/careers/",
+    "countries": [
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Civil",
+      "Transportation",
+      "Rail",
+      "Airports",
+      "Bridges"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "kimley-horn",
+    "name": "Kimley Horn",
+    "website": "https://www.kimley-horn.com",
+    "careers_url": "https://www.kimley-horn.com/careers/",
+    "countries": [
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Civil",
+      "Transportation",
+      "Water",
+      "Land development"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "langan",
+    "name": "Langan",
+    "website": "https://www.langan.com",
+    "careers_url": "https://www.langan.com/careers",
+    "countries": [
+      "USA",
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Civil",
+      "Geotechnical",
+      "Environmental",
+      "GIS"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "dewberry",
+    "name": "Dewberry",
+    "website": "https://www.dewberry.com",
+    "careers_url": "https://www.dewberry.com/careers",
+    "countries": [
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Civil",
+      "Water",
+      "GIS",
+      "Transportation"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "power-engineers",
+    "name": "POWER Engineers",
+    "website": "https://www.powereng.com",
+    "careers_url": "https://www.powereng.com/careers",
+    "countries": [
+      "USA",
+      "Canada"
+    ],
+    "regions": [
+      "Alberta"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "sb-energy",
+    "name": "SB Energy",
+    "website": "https://www.sbenergy.com",
+    "careers_url": "https://www.sbenergy.com/careers",
+    "countries": [
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Analytics"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "besix",
+    "name": "BESIX",
+    "website": "https://www.besix.com",
+    "careers_url": "https://www.besix.com/en/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Marine",
+      "Estimating"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "alec",
+    "name": "ALEC",
+    "website": "https://www.alec.ae",
+    "careers_url": "https://www.alec.ae/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "asgc",
+    "name": "ASGC",
+    "website": "https://www.asgcgroup.com",
+    "careers_url": "https://www.asgcgroup.com/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "khansaheb",
+    "name": "Khansaheb",
+    "website": "https://www.khansaheb.ae",
+    "careers_url": "https://www.khansaheb.ae/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Estimating"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "dutco",
+    "name": "Dutco",
+    "website": "https://www.dutco.com",
+    "careers_url": "https://www.dutco.com/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Marine",
+      "Estimating"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "al-naboodah-construction-group",
+    "name": "Al Naboodah Construction Group",
+    "website": "https://www.alnaboodah.com",
+    "careers_url": "https://www.alnaboodah.com/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Construction",
+      "Civil",
+      "Transportation",
+      "Estimating"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "national-marine-dredging-company-group",
+    "name": "National Marine Dredging Company Group",
+    "website": "https://www.nmdc-group.com",
+    "careers_url": "https://www.nmdc-group.com/",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Marine",
+      "Civil",
+      "Energy",
+      "Dredging"
+    ],
+    "priority": 3,
+    "provenance": "Official employer homepage candidate; careers path not confirmed",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "dp-world",
+    "name": "DP World",
+    "website": "https://www.dpworld.com",
+    "careers_url": "https://www.dpworld.com/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Marine",
+      "Civil",
+      "Transportation",
+      "Asset management",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "ad-ports-group",
+    "name": "AD Ports Group",
+    "website": "https://www.adportsgroup.com",
+    "careers_url": "https://www.adportsgroup.com/en/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Marine",
+      "Civil",
+      "Transportation",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "dubai-airports",
+    "name": "Dubai Airports",
+    "website": "https://www.dubaiairports.ae",
+    "careers_url": "https://careers.dubaiairports.ae/",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Airports",
+      "Civil",
+      "Asset management",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "abu-dhabi-airports",
+    "name": "Abu Dhabi Airports",
+    "website": "https://www.adairports.ae",
+    "careers_url": "https://www.adairports.ae/en/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Airports",
+      "Civil",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "etihad-rail",
+    "name": "Etihad Rail",
+    "website": "https://www.etihadrail.ae",
+    "careers_url": "https://www.etihadrail.ae/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Rail",
+      "Civil",
+      "Transportation",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "dubai-roads-and-transport-authority",
+    "name": "Dubai Roads and Transport Authority",
+    "website": "https://www.rta.ae",
+    "careers_url": "https://www.rta.ae/",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Transportation",
+      "Rail",
+      "Transit",
+      "Civil",
+      "GIS"
+    ],
+    "priority": 3,
+    "provenance": "Official employer homepage candidate; careers path not confirmed",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "dubai-electricity-and-water-authority",
+    "name": "Dubai Electricity and Water Authority",
+    "website": "https://www.dewa.gov.ae",
+    "careers_url": "https://www.dewa.gov.ae/en/about-us/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Water",
+      "Energy",
+      "Civil",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "masdar",
+    "name": "Masdar",
+    "website": "https://masdar.ae",
+    "careers_url": "https://masdar.ae/en/careers",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "GIS",
+      "Analytics"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "adnoc",
+    "name": "ADNOC",
+    "website": "https://www.adnoc.ae",
+    "careers_url": "https://jobs.adnoc.ae/",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "Construction",
+      "Project controls"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "taqa",
+    "name": "TAQA",
+    "website": "https://www.taqa.com",
+    "careers_url": "https://www.taqa.com/careers/",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Energy",
+      "Water",
+      "Civil",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "engie",
+    "name": "ENGIE",
+    "website": "https://www.engie.com",
+    "careers_url": "https://jobs.engie.com/",
+    "countries": [
+      "Canada",
+      "USA",
+      "UAE"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Energy",
+      "Civil",
+      "Water",
+      "GIS"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "boskalis",
+    "name": "Boskalis",
+    "website": "https://boskalis.com",
+    "careers_url": "https://careers.boskalis.com/",
+    "countries": [
+      "UAE",
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Marine",
+      "Civil",
+      "Dredging",
+      "Energy"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "jan-de-nul",
+    "name": "Jan De Nul",
+    "website": "https://www.jandenul.com",
+    "careers_url": "https://jobs.jandenul.com/",
+    "countries": [
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Marine",
+      "Civil",
+      "Dredging",
+      "Energy"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "deme",
+    "name": "DEME",
+    "website": "https://www.deme-group.com",
+    "careers_url": "https://www.deme-group.com/careers",
+    "countries": [
+      "UAE",
+      "USA"
+    ],
+    "regions": [],
+    "sectors": [
+      "Marine",
+      "Civil",
+      "Dredging",
+      "Energy"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "royal-haskoningdhv",
+    "name": "Royal HaskoningDHV",
+    "website": "https://www.royalhaskoningdhv.com",
+    "careers_url": "https://www.royalhaskoningdhv.com/en/careers",
+    "countries": [
+      "Canada",
+      "UAE",
+      "USA"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Marine",
+      "Water",
+      "Civil",
+      "Transportation"
+    ],
+    "priority": 4,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "gensler",
+    "name": "Gensler",
+    "website": "https://www.gensler.com",
+    "careers_url": "https://www.gensler.com/careers",
+    "countries": [
+      "USA",
+      "UAE"
+    ],
+    "regions": [],
+    "sectors": [
+      "Construction",
+      "Project controls",
+      "Analytics"
+    ],
+    "priority": 5,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "city-of-toronto",
+    "name": "City of Toronto",
+    "website": "https://www.toronto.ca",
+    "careers_url": "https://jobs.toronto.ca/jobsatcity/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Municipal",
+      "Civil",
+      "Water",
+      "Transportation",
+      "GIS",
+      "Asset management"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "city-of-ottawa",
+    "name": "City of Ottawa",
+    "website": "https://ottawa.ca",
+    "careers_url": "https://jobs-emplois.ottawa.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Ontario"
+    ],
+    "sectors": [
+      "Municipal",
+      "Civil",
+      "Water",
+      "Transportation",
+      "GIS"
+    ],
+    "priority": 3,
+    "provenance": "curated official-domain candidate",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "equilibrium-mining",
+    "name": "Equilibrium Mining",
+    "website": "https://equilibriummining.com",
+    "careers_url": "https://equilibriummining.com/careers/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "British Columbia"
+    ],
+    "sectors": [
+      "Mining",
+      "Geotechnical"
+    ],
+    "priority": 4,
+    "provenance": "Owner-supplied careers link; runtime verification required",
+    "foreign_applicant_evidence": "Unknown: check each posting’s work-authorisation and registration requirements."
+  },
+  {
+    "key": "saskatchewan-health-authority",
+    "name": "Saskatchewan Health Authority",
+    "website": "https://www.saskhealthauthority.ca",
+    "careers_url": "https://www.saskhealthauthority.ca/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Healthcare operations",
+      "Analytics",
+      "Asset management"
+    ],
+    "priority": 2,
+    "provenance": "Curated official-domain candidate; runtime verification required. Non-clinical roles only for the healthcare-analytics track.",
+    "foreign_applicant_evidence": "Unknown: actual occupation, posting and permit conditions require review. Hospital employer sector alone is not an eligibility decision."
+  },
+  {
+    "key": "ehealth-saskatchewan",
+    "name": "eHealth Saskatchewan",
+    "website": "https://www.ehealthsask.ca",
+    "careers_url": "https://www.ehealthsask.ca/careers",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Healthcare operations",
+      "Analytics"
+    ],
+    "priority": 2,
+    "provenance": "Curated official-domain candidate; runtime verification required. Non-clinical roles only for the healthcare-analytics track.",
+    "foreign_applicant_evidence": "Unknown: actual occupation, posting and permit conditions require review. Hospital employer sector alone is not an eligibility decision."
+  },
+  {
+    "key": "university-of-regina",
+    "name": "University of Regina",
+    "website": "https://www.uregina.ca",
+    "careers_url": "https://urcareers.uregina.ca/",
+    "countries": [
+      "Canada"
+    ],
+    "regions": [
+      "Regina",
+      "Saskatchewan"
+    ],
+    "sectors": [
+      "Facilities",
+      "Civil",
+      "Analytics",
+      "Asset management"
+    ],
+    "priority": 2,
+    "provenance": "Curated official-domain candidate; runtime verification required. Non-clinical roles only for the healthcare-analytics track.",
+    "foreign_applicant_evidence": "Unknown: actual occupation, posting and permit conditions require review. Hospital employer sector alone is not an eligibility decision."
+  }
+]
