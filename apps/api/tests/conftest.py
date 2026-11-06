@@ -5,14 +5,15 @@ os.environ["API_TOKEN"] = "test-only-token-000000000000000000000000"
 os.environ["CAREERPILOT_DATA_DIR"] = tempfile.mkdtemp(prefix="careerpilot-tests-")
 
 import pytest
-from careerpilot.config import database
-from careerpilot.initialize import initialize
-from careerpilot.main import app
-from careerpilot.models import Base, Preferences
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event, select
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
+
+from careerpilot.config import database
+from careerpilot.initialize import initialize
+from careerpilot.main import app
+from careerpilot.models import Base, Preferences
 
 
 @pytest.fixture

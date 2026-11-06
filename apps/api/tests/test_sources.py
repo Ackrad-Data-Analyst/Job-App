@@ -2,6 +2,7 @@ import asyncio
 
 import httpx
 import pytest
+
 from careerpilot.models import Feed
 from careerpilot.schemas import SearchInput
 from careerpilot.sources import Providers, canonical, capture, plain, unique

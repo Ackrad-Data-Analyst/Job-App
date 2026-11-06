@@ -16,7 +16,7 @@ export function EmployerDirectory({
   action,
   compact = false,
 }: Props) {
-  const [country, setCountry] = useState(catalog?.default_country || "Canada"),
+  const [country, setCountry] = useState(catalog?.default_country || "USA"),
     [region, setRegion] = useState(""),
     [sector, setSector] = useState(""),
     [query, setQuery] = useState(""),
@@ -96,7 +96,7 @@ export function EmployerDirectory({
           <p className="muted">
             {employers.length} employer targets ·{" "}
             {catalog.role_titles?.length || 143} role titles · Home-base focus:{" "}
-            {preferences.home_base || "Regina, Saskatchewan"}
+            {preferences.home_base || "Not set"}
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export function EmployerDirectory({
             onChange={(e) => reset(() => setCountry(e.target.value))}
           >
             <option value="">All primary markets</option>
-            {["Canada", "UAE", "USA"].map((v) => (
+            {(catalog.markets || ["USA", "UAE"]).map((v: string) => (
               <option key={v}>{v}</option>
             ))}
           </select>
@@ -126,15 +126,11 @@ export function EmployerDirectory({
             onChange={(e) => reset(() => setRegion(e.target.value))}
           >
             <option value="">Any location</option>
-            {[
-              "Regina",
-              "Saskatchewan",
-              "Alberta",
-              "Ontario",
-              "British Columbia",
-            ].map((v) => (
-              <option key={v}>{v}</option>
-            ))}
+            {[...new Set<string>(employers.flatMap((e: R) => e.regions))]
+              .sort()
+              .map((v) => (
+                <option key={v}>{v}</option>
+              ))}
           </select>
         </label>
         <label>

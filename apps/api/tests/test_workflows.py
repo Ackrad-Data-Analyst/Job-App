@@ -2,6 +2,8 @@ import base64
 import json
 
 import pytest
+from sqlalchemy import select
+
 from careerpilot.documents import TEMPLATES, check, compose
 from careerpilot.matching import fit, salary_comparison
 from careerpilot.models import (
@@ -9,7 +11,6 @@ from careerpilot.models import (
     Vacancy,
 )
 from careerpilot.schemas import FactInput, JobInput
-from sqlalchemy import select
 
 
 def stage(c, a, s, **kwargs):
@@ -39,7 +40,8 @@ def test_empty_install_has_no_fictional_jobs(client, db):
     assert client.get("/api/applications").json() == []
     assert list(db.scalars(select(Feed))) == []
     p = client.get("/api/preferences").json()
-    assert [x["country"] for x in p["countries"]][:2] == ["Canada", "UAE"]
+    assert [x["country"] for x in p["countries"]] == ["USA", "UAE"]
+    assert p["home_base"] == "" and p["location_priorities"] == []
     assert all(x["authorization"] == "unknown" and x["min_salary"] is None for x in p["countries"])
 
 
@@ -304,6 +306,8 @@ def test_salary_unknown_and_dated_currency_rates(client):
     p = client.get("/api/preferences").json()
     country = p["countries"][0]
     country["min_salary"] = 60000
+    country["currency"] = "CAD"
+    p["comparison_currency"] = "CAD"
     j = {"salary_min": None, "salary_max": None, "salary_currency": "CAD", "salary_period": "year"}
     r = salary_comparison(j, p, country)
     assert r["minimum_status"] != "Below country minimum."
@@ -320,7 +324,7 @@ def test_preferences_do_not_infer_work_authorization(client):
     p = client.get("/api/preferences").json()
     p["countries"].reverse()
     assert client.put("/api/preferences", json=p).status_code == 200
-    assert client.get("/api/preferences").json()["countries"][0]["country"] == "Italy"
+    assert client.get("/api/preferences").json()["countries"][0]["country"] == "UAE"
     assert all(
         c["authorization"] == "unknown" for c in client.get("/api/preferences").json()["countries"]
     )

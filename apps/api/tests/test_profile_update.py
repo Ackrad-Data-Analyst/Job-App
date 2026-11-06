@@ -1,10 +1,11 @@
 import copy
 
 import pytest
+from sqlalchemy import select
+
 from careerpilot.models import Application, Document, Preferences, Skill
 from careerpilot.profile_update import apply_update
 from careerpilot.schemas import CandidateInput, FactInput
-from sqlalchemy import select
 
 
 def payload(client):
@@ -106,5 +107,83 @@ def test_invalid_correction_does_not_change_profile(person, db):
     value["candidate"]["name"] = "Unapplied fictional replacement"
     value["experience"][0]["start_date"] = "not-a-date"
     with pytest.raises(ValueError):
+        apply_update(db, value)
+    assert db.scalar(select(Candidate)).name == original
+
+
+def test_market_update_removes_cancelled_plan_without_replacing_career_edits(person, job, db):
+    from careerpilot.models import Candidate, Identity, Rule
+
+    candidate = db.scalar(select(Candidate))
+    candidate.summary = "Owner-edited current summary; retain it."
+    db.add(Identity(candidate_id=candidate.id, title="Canada location", details="Regina"))
+    db.add(Rule(candidate_id=candidate.id, title="Canada work route", details="Cancelled plan"))
+    db.add(
+        Rule(candidate_id=candidate.id, title="Private mobility context", details="Cancelled move")
+    )
+    db.add(Rule(candidate_id=candidate.id, title="Keep this private rule", details="Owner's rule"))
+    pref = db.scalar(select(Preferences))
+    before = copy.deepcopy(pref.data)
+    before["countries"][0].update(
+        min_salary=7100,
+        min_salary_period="month",
+        authorization="authorised",
+        authorization_route="Owner-edited route",
+    )
+    before["countries"].insert(
+        0, {"country": "Canada", "currency": "CAD", "authorization": "authorised"}
+    )
+    before.update(
+        home_base="Regina",
+        planned_move_date="2027-01-05",
+        comparison_currency="CAD",
+        exchange_rates={"CAD": 1.4, "AED": 3.67},
+    )
+    pref.data = before
+    db.commit()
+    value = payload(person)
+    value["update_scope"] = "markets"
+    value["candidate"]["summary"] = "Old export must not overwrite current edits."
+    value["skills"][0]["details"] = "Old export must not overwrite a skill."
+    incoming = value["preferences"]
+    incoming["countries"] = [c for c in incoming["countries"] if c["country"] in {"USA", "UAE"}]
+    incoming.update(
+        home_base="San Francisco, CA",
+        location_priorities=[],
+        planned_move_date="",
+        mobility_notes="USA and UAE only",
+        comparison_currency="USD",
+        canadian_location=False,
+    )
+    apply_update(db, value)
+    db.commit()
+    assert candidate.summary == "Owner-edited current summary; retain it."
+    assert all(
+        s.details != "Old export must not overwrite a skill." for s in db.scalars(select(Skill))
+    )
+    assert [c["country"] for c in pref.data["countries"]] == ["USA", "UAE"]
+    assert pref.data["countries"][0]["min_salary"] == 7100
+    assert pref.data["countries"][0]["authorization_route"] == "Owner-edited route"
+    assert pref.data["home_base"] == "San Francisco, CA" and not pref.data["planned_move_date"]
+    assert pref.data["comparison_currency"] == "USD" and pref.data["exchange_rates"] == {
+        "AED": 3.67
+    }
+    assert not list(db.scalars(select(Identity).where(Identity.title == "Canada location")))
+    assert {r.title for r in db.scalars(select(Rule))} == {"Keep this private rule"}
+    assert db.get(Application, job["id"]).vacancy_id == job["vacancy_id"]
+    apply_update(db, value)
+    db.commit()
+    assert {r.title for r in db.scalars(select(Rule))} == {"Keep this private rule"}
+
+
+def test_market_update_rejects_other_countries_before_mutation(person, db):
+    from careerpilot.models import Candidate
+
+    value = payload(person)
+    value["update_scope"] = "markets"
+    value["preferences"]["countries"] = [{"country": "Canada"}]
+    original = db.scalar(select(Candidate)).name
+    value["candidate"]["name"] = "Must not be applied"
+    with pytest.raises(ValueError, match="USA and UAE only"):
         apply_update(db, value)
     assert db.scalar(select(Candidate)).name == original

@@ -49,15 +49,8 @@ SKILLS = [
 ]
 SENIOR = re.compile(r"\b(senior|sr\.?|principal|director|chief|lead|head|manager)\b", re.I)
 COUNTRIES = [
-    ("Canada", "Regina, Saskatchewan, Alberta, Ontario, then other provinces", "CAD"),
-    ("UAE", "Dubai, Abu Dhabi", "AED"),
     ("USA", "", "USD"),
-    ("Australia", "", "AUD"),
-    ("United Kingdom", "", "GBP"),
-    ("Ireland", "", "EUR"),
-    ("New Zealand", "", "NZD"),
-    ("Qatar", "", "QAR"),
-    ("Italy", "", "EUR"),
+    ("UAE", "Dubai, Abu Dhabi", "AED"),
 ]
 
 
@@ -80,7 +73,7 @@ def defaults():
         "interests": ["civil engineering", "GIS", "infrastructure analytics"],
         "excluded_employers": ["First Quantum Minerals"],
         "excluded_terms": ["MEP", "facade", "façade", "finishes"],
-        "comparison_currency": "CAD",
+        "comparison_currency": "USD",
         "exchange_rates": {},
         "exchange_rate_date": "",
         "earliest_start": "2027-01-01",

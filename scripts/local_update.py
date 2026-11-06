@@ -49,7 +49,11 @@ def source_members(raw):
         raise ValueError("Unexpected number of files in source archive.")
     for entry in archive.infolist():
         p = PurePosixPath(entry.filename)
-        if p.is_absolute() or ".." in p.parts or any(":" in v or "\\" in v for v in p.parts):
+        if (
+            p.is_absolute()
+            or ".." in p.parts
+            or any(":" in v or "\\" in v for v in p.parts)
+        ):
             raise ValueError("Unsafe archive path.")
         if stat.S_ISLNK(entry.external_attr >> 16):
             raise ValueError("Source archive contains a symbolic link.")
@@ -63,7 +67,10 @@ def source_members(raw):
             for part in relative.parts
         ):
             raise ValueError("Archive contains private/runtime files.")
-        if relative.parts[0] not in ALLOWED_ROOTS and relative.as_posix() not in ALLOWED_FILES:
+        if (
+            relative.parts[0] not in ALLOWED_ROOTS
+            and relative.as_posix() not in ALLOWED_FILES
+        ):
             raise ValueError("Unexpected source archive file: " + relative.as_posix())
         total += entry.file_size
         if entry.file_size > 8000000 or total > 40000000:
@@ -113,7 +120,9 @@ def install(raw, expected_sha, root, profile=None, run_steps=True):
             "Stop CareerPilot using stop.bat, wait for it to stop, then run this update again."
         )
     api_python = (
-        root / "apps/api/.venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        root
+        / "apps/api/.venv"
+        / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
     )
     if run_steps and not api_python.is_file():
         raise ValueError(
@@ -123,7 +132,11 @@ def install(raw, expected_sha, root, profile=None, run_steps=True):
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S") + "-" + uuid.uuid4().hex[:6]
     backup = private / "source-backups" / stamp
     backup.mkdir(parents=True, mode=0o700)
-    env = {**os.environ, "CAREERPILOT_DATA_DIR": str(data), "NEXT_TELEMETRY_DISABLED": "1"}
+    env = {
+        **os.environ,
+        "CAREERPILOT_DATA_DIR": str(data),
+        "NEXT_TELEMETRY_DISABLED": "1",
+    }
     db_path = private / "careerpilot.db"
     # Ask the already installed configuration for its DB path, without outputting keys.
     if run_steps:
@@ -169,24 +182,35 @@ def install(raw, expected_sha, root, profile=None, run_steps=True):
             if os.name != "nt":
                 target.chmod(mode & 0o777 or 0o644)
         if run_steps:
-            print("Applying the database migration. Existing records are retained.", flush=True)
-            run([api_python, "-m", "alembic", "upgrade", "head"], root / "apps/api", env)
+            print(
+                "Applying the database migration. Existing records are retained.",
+                flush=True,
+            )
+            run(
+                [api_python, "-m", "alembic", "upgrade", "head"], root / "apps/api", env
+            )
         if profile is not None:
             # This payload is private and never part of a request to GitHub or an employer.
             corrected = backup / "owner-profile-correction.json"
-            corrected.write_text(json.dumps(profile, ensure_ascii=False), encoding="utf-8")
+            corrected.write_text(
+                json.dumps(profile, ensure_ascii=False), encoding="utf-8"
+            )
             corrected.chmod(0o600)
             if run_steps:
                 print(
-                    "Applying your supplied profile corrections and search preferences.", flush=True
+                    "Applying your supplied profile corrections and search preferences.",
+                    flush=True,
                 )
                 run(
                     [api_python, "-m", "careerpilot.profile_update", corrected],
                     root / "apps/api",
                     env,
                 )
-            seed.write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf-8")
-            seed.chmod(0o600)
+            if profile.get("update_scope") != "markets":
+                seed.write_text(
+                    json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf-8"
+                )
+                seed.chmod(0o600)
     except BaseException:
         for relative, existed in previous:
             target = root / relative
@@ -233,7 +257,9 @@ def main(revision=None, expected_sha=None, profile=None):
     ):
         raise ValueError("A pinned source revision and SHA256 are required.")
     root = app_folder(args.app)
-    private = Path(os.environ.get("CAREERPILOT_DATA_DIR", str(root / "data"))) / "private"
+    private = (
+        Path(os.environ.get("CAREERPILOT_DATA_DIR", str(root / "data"))) / "private"
+    )
     if (private / "runner.lock").exists():
         raise ValueError("Stop CareerPilot using stop.bat before running this updater.")
     if args.archive:

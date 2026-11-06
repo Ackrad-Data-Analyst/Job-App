@@ -11,7 +11,7 @@ from urllib.robotparser import RobotFileParser
 import httpx
 from sqlalchemy import select
 
-from .locations import region_rank
+from .locations import country_for, region_rank
 from .models import Feed, SourceVerification, now
 from .taxonomy import ALL_TITLES, CURRICULUM_SOURCES, EDUCATION_PATHWAYS
 
@@ -78,17 +78,30 @@ def ats_board(url):
 def view_catalog(db, p):
     checked = {r.catalog_key: r for r in db.scalars(select(SourceVerification))}
     excluded = [s.casefold() for s in p.get("excluded_employers", [])]
+    markets = [c["country"] for c in p.get("countries", []) if c.get("enabled", True)]
     output = []
     for c in CATALOG:
         if any(s in c["name"].casefold() for s in excluded):
             continue
+        countries = [country for country in markets if country in c["countries"]]
+        if p.get("countries") is not None and not countries:
+            continue
+        regions = [
+            region
+            for region in c["regions"]
+            if not markets or country_for(region)[0] in {"", *markets}
+        ]
         r = checked.get(c["key"])
         rank, label = region_rank(
-            " ".join(c["regions"]), "Canada", priorities=p.get("location_priorities")
+            " ".join(regions),
+            countries[0] if countries else "",
+            priorities=p.get("location_priorities"),
         )
         output.append(
             {
                 **c,
+                "countries": countries if markets else c["countries"],
+                "regions": regions,
                 "location_rank": rank,
                 "location_note": label,
                 "state": r.state if r else "unchecked",
@@ -102,6 +115,8 @@ def view_catalog(db, p):
             }
         )
     return {
+        "markets": markets,
+        "default_country": markets[0] if markets else "",
         "employers": sorted(output, key=lambda c: (c["priority"], c["name"])),
         "role_titles": ALL_TITLES,
         "education_pathways": EDUCATION_PATHWAYS,

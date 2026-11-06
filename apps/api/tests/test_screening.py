@@ -1,10 +1,11 @@
 from datetime import UTC, datetime, timedelta
 
 import pytest
+from sqlalchemy import select
+
 from careerpilot.matching import analytics_domain, fit, salary_comparison
 from careerpilot.models import Preferences
 from careerpilot.screening import competition, discovery_screen, posting_age
-from sqlalchemy import select
 
 NOW = datetime(2026, 11, 5, 12, tzinfo=UTC)
 PREFS = {
@@ -216,6 +217,7 @@ def test_usa_entry_level_pay_exception_and_intern_route(person, db):
     import asyncio
 
     import httpx
+
     from careerpilot.models import Feed
     from careerpilot.schemas import SearchInput
     from careerpilot.sources import Providers

@@ -35,7 +35,7 @@ test("capture, fit, document review and explicit manual submission", async ({
   await page
     .getByLabel("Employer", { exact: true })
     .fill("Example Infrastructure (fictional)");
-  await page.getByLabel("City / region").fill("Regina");
+  await page.getByLabel("City / region").fill("Denver");
   await page
     .getByLabel("Original job URL")
     .fill(
@@ -133,12 +133,15 @@ test("expanded employer directory and degree pathways are usable", async ({
       exact: true,
     }),
   ).toBeVisible();
-  await page.getByLabel("Employer market").selectOption("Canada");
-  await page.getByLabel("Planning location focus").selectOption("Regina");
-  await page.getByLabel("Employer or domain", { exact: true }).fill("Clifton");
+  await page.getByLabel("Employer market").selectOption("USA");
+  await expect(page.getByLabel("Employer market").locator("option")).toHaveText(
+    ["All primary markets", "USA", "UAE"],
+  );
+  await expect(page.getByText("Regina", { exact: false })).toHaveCount(0);
+  await page.getByLabel("Employer or domain", { exact: true }).fill("AECOM");
   await expect(
     page.getByRole("heading", {
-      name: "Clifton Engineering Group",
+      name: "AECOM",
       exact: true,
     }),
   ).toBeVisible();
@@ -150,7 +153,7 @@ test("expanded employer directory and degree pathways are usable", async ({
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Employer careers", exact: false }),
-  ).toHaveAttribute("href", "https://www.clifton.ca/careers/");
+  ).toHaveAttribute("href", "https://aecom.com/careers/");
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -189,8 +192,8 @@ test("live-result pagination does not turn employer targets into vacancies", asy
       {
         title: "Fictional pagination vacancy " + (offset + 1),
         employer: "Fictional test employer",
-        country: "Canada",
-        location: "Regina, Saskatchewan",
+        country: "USA",
+        location: "Denver, Colorado",
         url: "https://example.invalid/jobs/" + offset,
         description: "Fictional browser-test response only.",
         salary: "Not published",

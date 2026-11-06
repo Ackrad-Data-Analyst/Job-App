@@ -109,7 +109,7 @@ class PreferencesInput(Input):
     excluded_terms: list[str] = Field(
         default_factory=lambda: ["MEP", "facade", "façade", "finishes"], max_length=100
     )
-    comparison_currency: str = Field(default="CAD", pattern="^[A-Z]{3}$")
+    comparison_currency: str = Field(default="USD", pattern="^[A-Z]{3}$")
     exchange_rates: dict[str, float] = Field(default_factory=dict, max_length=30)
     exchange_rate_date: str = Field(default="", max_length=10)
     earliest_start: str = "2027-01-01"
@@ -117,10 +117,8 @@ class PreferencesInput(Input):
     early_career_only: bool = True
     languages_on_resume: bool = False
     canadian_location: bool = False
-    home_base: str = Field(default="Regina, Saskatchewan", max_length=160)
-    location_priorities: list[str] = Field(
-        default_factory=lambda: ["Regina", "Saskatchewan", "Alberta", "Ontario"], max_length=20
-    )
+    home_base: str = Field(default="", max_length=160)
+    location_priorities: list[str] = Field(default_factory=list, max_length=20)
     max_commute_minutes: int | None = Field(default=None, ge=0, le=240)
     relocation_preference: Literal["unspecified", "near home", "open", "rotational"] = "unspecified"
     search_catalog_version: int = Field(default=0, ge=0)

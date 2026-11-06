@@ -3,6 +3,8 @@ import json
 
 import httpx
 import pytest
+from sqlalchemy import select
+
 from careerpilot.catalog import BY_KEY, ats_board, check_batch
 from careerpilot.locations import country_for, region_rank
 from careerpilot.matching import links
@@ -11,7 +13,6 @@ from careerpilot.schemas import SearchInput
 from careerpilot.sources import Providers, capture
 from careerpilot.taxonomy import ALL_TITLES
 from careerpilot.workday import decode_board, encode_board, public_board
-from sqlalchemy import select
 
 
 def run(value):
@@ -30,7 +31,7 @@ def test_employer_directory_is_not_a_list_of_vacancies(client):
     r = client.get("/api/sources/catalog")
     assert r.status_code == 200
     body = r.json()
-    assert len(body["employers"]) >= 124 and len(body["role_titles"]) >= 143
+    assert len(body["employers"]) >= 70 and len(body["role_titles"]) >= 143
     assert all(
         e["state"] == "unchecked" and "Unknown" in e["foreign_applicant_evidence"]
         for e in body["employers"]
@@ -38,7 +39,10 @@ def test_employer_directory_is_not_a_list_of_vacancies(client):
     assert client.get("/api/applications").json() == []
     assert all("indeed" not in json.dumps(e).lower() for e in body["employers"])
     assert all("first quantum" not in e["name"].lower() for e in body["employers"])
-    assert any(e["key"] == "city-of-regina" for e in body["employers"])
+    assert body["markets"] == ["USA", "UAE"] and body["default_country"] == "USA"
+    assert all(set(e["countries"]) <= {"USA", "UAE"} for e in body["employers"])
+    assert not any(e["key"] == "city-of-regina" for e in body["employers"])
+    assert all("Regina" not in e["regions"] for e in body["employers"])
     assert any(e["key"] == "etihad-rail" for e in body["employers"])
     assert len(set(ALL_TITLES)) == len(ALL_TITLES)
 
@@ -224,8 +228,8 @@ def test_failed_sources_keep_directory_targets_separate_from_jobs(person, db):
     )
     db.commit()
     p = Providers(httpx.MockTransport(lambda r: httpx.Response(403)))
-    r = run(p.search(db, SearchInput(title="Civil Engineer", country="Canada")))
-    assert r["jobs"] == [] and r["total"] == 0 and r["errors"] and r["target_count"] > 50
+    r = run(p.search(db, SearchInput(title="Civil Engineer", country="USA")))
+    assert r["jobs"] == [] and r["total"] == 0 and r["errors"] and r["target_count"] > 20
     assert r["employer_targets"] and r["source_checks"][0]["status"] == "failed"
 
 

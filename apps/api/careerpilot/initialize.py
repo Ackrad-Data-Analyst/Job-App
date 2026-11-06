@@ -81,8 +81,8 @@ def initialize(db, starters=False):
         value["target_titles"] = list(
             dict.fromkeys([*value.get("target_titles", []), *ALL_TITLES])
         )[:250]
-        value.setdefault("home_base", "Regina, Saskatchewan")
-        value.setdefault("location_priorities", ["Regina", "Saskatchewan", "Alberta", "Ontario"])
+        value.setdefault("home_base", "")
+        value.setdefault("location_priorities", [])
         value["search_catalog_version"] = 1
         pref.data = PreferencesInput.model_validate(value).model_dump()
     db.commit()
@@ -99,14 +99,14 @@ def demo(db):
     db.add(e)
     db.flush()
     for title, city, stage in [
-        ("Junior Civil Engineer (fictional)", "Regina", "Discovered"),
-        ("GIS Analyst (fictional)", "Calgary", "Under Review"),
+        ("Junior Civil Engineer (fictional)", "Denver", "Discovered"),
+        ("GIS Analyst (fictional)", "Phoenix", "Under Review"),
         ("Graduate Drainage Engineer (fictional)", "Dubai", "Shortlisted"),
     ]:
         j = Vacancy(
             employer_id=e.id,
             title=title,
-            country="UAE" if city == "Dubai" else "Canada",
+            country="UAE" if city == "Dubai" else "USA",
             location=city,
             description="FICTIONAL DEMONSTRATION. This is not a genuine job opening. Example full-time role supporting civil infrastructure, GIS and drainage analysis. Example requirements: QGIS and Python.",
             source="Fictional demonstration",

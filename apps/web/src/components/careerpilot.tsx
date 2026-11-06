@@ -43,17 +43,7 @@ const KINDS = [
   "identity",
   "rules",
 ];
-const COUNTRIES = [
-  "Canada",
-  "UAE",
-  "USA",
-  "Australia",
-  "United Kingdom",
-  "Ireland",
-  "New Zealand",
-  "Qatar",
-  "Italy",
-];
+const COUNTRIES = ["USA", "UAE"];
 const NAV = [
   ["/", "Overview", LayoutDashboard],
   ["/search", "Find opportunities", Search],
@@ -1242,7 +1232,7 @@ function Preferences(c: Ctx) {
             employment_type: d.employment_type,
             early_career_only: d.early_career_only === "on",
             languages_on_resume: d.languages_on_resume === "on",
-            canadian_location: d.canadian_location === "on",
+            canadian_location: false,
           };
           void c.action(
             () => api("preferences", body, "PUT"),
@@ -1262,18 +1252,25 @@ function Preferences(c: Ctx) {
             <button
               type="button"
               className="btn secondary small"
+              disabled={COUNTRIES.every((country) =>
+                countries.some((c) => c.country === country),
+              )}
               onClick={() =>
                 setCountries([
                   ...countries,
                   {
-                    country: "",
+                    country:
+                      COUNTRIES.find(
+                        (country) =>
+                          !countries.some((c) => c.country === country),
+                      ) || "USA",
                     regions: "",
                     enabled: true,
                     authorization: "unknown",
                     authorization_note: "",
                     min_salary: null,
-                    currency: "CAD",
-                    template: "Canada",
+                    currency: "USD",
+                    template: "USA",
                   },
                 ])
               }
@@ -1498,19 +1495,12 @@ function Preferences(c: Ctx) {
             <Field
               name="home_base"
               label="Planned home base"
-              value={p.home_base || "Regina, Saskatchewan"}
+              value={p.home_base || ""}
             />
             <Field
               name="location_priorities"
               label="Location priorities, comma-separated"
-              value={(
-                p.location_priorities || [
-                  "Regina",
-                  "Saskatchewan",
-                  "Alberta",
-                  "Ontario",
-                ]
-              ).join(", ")}
+              value={(p.location_priorities || []).join(", ")}
             />
             <Field
               name="max_commute_minutes"
@@ -1661,15 +1651,6 @@ function Preferences(c: Ctx) {
             label="Include confirmed languages on resumes"
             value={p.languages_on_resume}
           />
-          <Check
-            name="canadian_location"
-            label="Use a confirmed Canada-location fact for Canada templates"
-            value={p.canadian_location}
-          />
-          <p className="fine">
-            The Canada-location fact must also be confirmed and resume-allowed.
-            Unverified locations remain blocked.
-          </p>
         </section>
         <button className="btn primary" disabled={c.busy}>
           Save preferences
@@ -2119,7 +2100,7 @@ function Employers(c: Ctx) {
 const emptyJob = {
   title: "",
   employer: "",
-  country: "Canada",
+  country: "USA",
   location: "",
   url: "",
   description: "",
@@ -2247,7 +2228,7 @@ function JobFields({ job: j }: { job: R }) {
           />
           <Field
             name="salary_currency"
-            label="Currency code (CAD, AED, USD…)"
+            label="Currency code (USD or AED)"
             value={j.salary_currency}
           />
           <Select
@@ -2609,11 +2590,10 @@ function SearchPage(c: Ctx) {
         </div>
         <p className="fine">
           Related searches include title variants within the role family. Domain
-          searches cover all supported civil/infrastructure directions. Regina,
-          Saskatchewan, Alberta and Ontario are preferred; other Canadian
-          locations remain visible unless you choose “only”. Employer
-          sponsorship and permit compatibility require posting-specific
-          evidence.
+          searches cover all supported civil/infrastructure directions in the
+          USA and UAE. All US states are in scope; Dubai and Abu Dhabi are the
+          preferred UAE locations. Employer sponsorship and permit compatibility
+          require posting-specific evidence.
         </p>
         <div className="actions">
           <button className="btn primary" disabled={c.busy}>
@@ -2811,7 +2791,7 @@ function ApplicationPage(c: Ctx & { a: R }) {
       c.data.preferences.countries.find((x: R) => x.country === j.country)
         ?.template ||
         j.country ||
-        "Canada",
+        "USA",
     ),
     [contact, setContact] = useState("");
   useEffect(() => setStage(a.stage), [a.stage]);
