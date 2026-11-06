@@ -187,3 +187,31 @@ def test_market_update_rejects_other_countries_before_mutation(person, db):
     with pytest.raises(ValueError, match="USA and UAE only"):
         apply_update(db, value)
     assert db.scalar(select(Candidate)).name == original
+
+
+def test_market_update_clears_retired_saved_searches(person, db):
+    from careerpilot.models import SavedSearch
+
+    retired = SavedSearch(
+        name="Regina search", titles=["Civil Engineer"], countries=["Canada"], sources=["feeds"]
+    )
+    mixed = SavedSearch(
+        name="USA and Canada",
+        titles=["GIS Analyst"],
+        countries=["USA", "Canada"],
+        sources=["feeds"],
+        result={"old": "summary"},
+    )
+    kept = SavedSearch(
+        name="My Dubai shortlist", titles=["Estimator"], countries=["UAE"], sources=["feeds"]
+    )
+    db.add_all([retired, mixed, kept])
+    db.commit()
+    retired_id = retired.id
+    value = payload(person)
+    value["update_scope"] = "markets"
+    apply_update(db, value)
+    db.commit()
+    assert db.get(SavedSearch, retired_id) is None
+    assert mixed.countries == ["USA"] and mixed.result == {} and "Canada" not in mixed.name
+    assert kept.name == "My Dubai shortlist" and kept.countries == ["UAE"]

@@ -10,7 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .config import PRIVATE, engine
-from .models import FACTS, Activity, Application, Candidate, Document, Preferences
+from .models import FACTS, Activity, Application, Candidate, Document, Preferences, SavedSearch
 from .schemas import CandidateInput, FactInput, PreferencesInput
 
 
@@ -148,6 +148,19 @@ def apply_market_update(db, incoming):
         "rules": {"canadian registration", "canada work route", "private mobility context"},
     }
     changed = 0
+    for search in db.scalars(select(SavedSearch)):
+        retained = [c for c in search.countries if c in {"USA", "UAE"}]
+        if retained == search.countries:
+            continue
+        if retained:
+            search.countries = retained
+            search.result = {}
+            search.last_run = None
+            if re.search(r"canad|regina|saskatchewan|alberta|ontario", search.name, re.I):
+                search.name = " / ".join(retained) + " opportunities"
+        else:
+            db.delete(search)
+        changed += 1
     for kind, titles in cancelled.items():
         for row in db.scalars(select(FACTS[kind]).where(FACTS[kind].candidate_id == person.id)):
             if row.title.casefold().strip() in titles:

@@ -39,3 +39,12 @@ The directory contains 127 candidate official-employer career pages and 149 role
 Fresh employer jobs with unknown applicant counts are included with an explicit unknown label. Strict posting-age and known completed-application rules are separate from click counts; old jobs require evidence of fewer than 20 applications. No Indeed results are accepted. Owner-specific profile corrections are packaged only in the private download, never in this repository.
 
 Native Windows execution, Microsoft Word automation and PostgreSQL/Supabase execution remain untested in this Linux environment. The updater uses the existing Windows Python installation; the actual upgrade and production lifecycle were tested on Linux. Local use requires no deployment.
+
+
+## USA/UAE market change — 5 November 2026 (owner's local date)
+
+New installs and visible market/template selectors now focus on USA and UAE. The employer catalogue is scoped to enabled markets and removes irrelevant Canadian region tags; 72 of the 127 source-directory targets remain relevant to these markets. No new vacancy or hiring claims were introduced.
+
+The private market correction removes the cancelled destination, permit and family-mobility planning facts, resets destination preferences, and removes or narrows saved searches for retired markets. It retains owner-edited career facts, USA/UAE pay and authorisation settings, application records and submitted history. Historical project research is not rewritten as a change of travel plan. The local seed is exported from the resulting database, preserving local edits rather than restoring an older profile export.
+
+147 Python tests, five session unit tests and 12 desktop/mobile browser tests passed, along with TypeScript checking, the production build and Ruff source checks. The generated market updater was run twice against an existing installed app: it preserved candidate edits, saved/submitted records and USA/UAE salary settings, removed the cancelled planning facts, and exported the canonical private seed. Native Windows execution remains untested here.
